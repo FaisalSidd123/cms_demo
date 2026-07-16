@@ -1,11 +1,11 @@
 import React from 'react';
 import { useMockData } from '../hooks/useMockData';
 import { DashboardSkeleton } from '../components/Skeletons';
-import { 
-  Car, 
-  CalendarCheck, 
-  TrendingUp, 
-  Users, 
+import {
+  Car,
+  CalendarCheck,
+  TrendingUp,
+  Users,
   DollarSign,
   Clock,
   Briefcase,
@@ -88,14 +88,13 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8 text-left">
-      
+
       {/* Welcome header */}
       <div className="flex justify-between items-start animate-fade-slide-up">
         <div>
           <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest block mb-0.5">// Operations Center</span>
           <h2 className="text-2xl md:text-3xl font-display font-extrabold text-charcoal uppercase leading-none">
-            Command Center Overview
-          </h2>
+            Admin Workspace          </h2>
           <p className="text-xs text-neutral-500 font-sans mt-1.5">
             Real-time platform metrics, agent performance, and administrative audit trails.
           </p>
@@ -108,7 +107,7 @@ export default function AdminDashboard() {
 
       {/* KPI Cards Grid — staggered entrance */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 stagger-children">
-        
+
         {/* KPI: Total Inventory */}
         <div className="dash-card dash-card--blue p-4 flex flex-col justify-between h-24 animate-fade-slide-up">
           <div className="flex justify-between items-start">
@@ -179,7 +178,7 @@ export default function AdminDashboard() {
 
       {/* Charts Row: Revenue Donut + Inventory Ring + Top Vehicle */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-slide-up" style={{ animationDelay: '200ms' }}>
-        
+
         {/* Revenue Breakdown Donut */}
         <div className="dash-panel p-5">
           <span className="font-display font-bold text-sm uppercase tracking-wider text-charcoal block mb-4">Revenue by Segment</span>
@@ -301,7 +300,7 @@ export default function AdminDashboard() {
 
       {/* Leaderboard and Activity Row */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 animate-fade-slide-up" style={{ animationDelay: '300ms' }}>
-        
+
         {/* Enhanced Agent Leaderboard */}
         <div className="lg:col-span-3 dash-panel p-5 flex flex-col justify-between">
           <div>
@@ -342,9 +341,9 @@ export default function AdminDashboard() {
                       <td className="py-3.5 text-right">
                         <span className="font-display font-bold text-brand-red text-sm block mb-1.5">{agent.revenue}</span>
                         <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className="h-full rounded-full progress-fill"
-                            style={{ 
+                            style={{
                               width: `${(agent.revenueNum / maxRevenue) * 100}%`,
                               background: idx === 0 ? 'linear-gradient(90deg, #F59E0B, #D97706)' : '#C0392B'
                             }}
