@@ -6,7 +6,7 @@ import { Mail, Lock, ArrowRight, ArrowLeft } from 'lucide-react';
 export default function Login() {
   const navigate = useNavigate();
   const [role, setRole] = useState('client'); // 'client' / 'agent' / 'admin'
-  const [email, setEmail] = useState('alexander@vanguard.com');
+  const [email, setEmail] = useState('alexander@ckautocentre.com');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -37,7 +37,7 @@ export default function Login() {
         <div className="absolute inset-0 w-full h-full select-none pointer-events-none">
           <img
             src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80"
-            alt="Vanguard Brand Car"
+            alt="C&K Auto Centre Brand Car"
             className="w-full h-full object-cover opacity-35 filter grayscale"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/80 to-black/20" />
@@ -54,7 +54,7 @@ export default function Login() {
           </Link>
           
           <div className="space-y-2">
-            <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest block font-bold">// Vanguard Hub</span>
+            <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest block font-bold">// C&K Hub</span>
             <h1 className="font-display font-extrabold text-white text-3xl md:text-4xl uppercase tracking-wider leading-tight">
               Discerning Procurement <br />
               <span className="text-brand-red">Simplified.</span>
@@ -68,7 +68,7 @@ export default function Login() {
 
         {/* Footer info */}
         <span className="absolute bottom-8 left-12 font-mono text-[9px] text-neutral-500 uppercase tracking-widest">
-          © 2026 Vanguard Motors Corp.
+          © 2026 C&K Auto Centre Limited
         </span>
 
       </div>
@@ -90,7 +90,7 @@ export default function Login() {
           {/* Logo & welcoming text */}
           <div className="space-y-1">
             <Link to="/" className="inline-block font-display font-extrabold tracking-widest text-md uppercase text-charcoal">
-              Vanguard <span className="text-brand-red">Motors</span>
+              C&K <span className="text-brand-red">Auto Centre</span>
             </Link>
             <h2 className="text-xl font-display font-extrabold uppercase text-charcoal tracking-wide mt-2">
               Workspace Access
@@ -106,7 +106,7 @@ export default function Login() {
               type="button"
               onClick={() => {
                 setRole('client');
-                setEmail('alexander@vanguard.com');
+                setEmail('alexander@ckautocentre.com');
               }}
               className={`pb-2.5 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                 role === 'client' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
@@ -118,7 +118,7 @@ export default function Login() {
               type="button"
               onClick={() => {
                 setRole('agent');
-                setEmail('sarah.connor@vanguardmotors.com');
+                setEmail('sarah.connor@ckautocentre.com');
               }}
               className={`pb-2.5 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                 role === 'agent' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
@@ -130,7 +130,7 @@ export default function Login() {
               type="button"
               onClick={() => {
                 setRole('admin');
-                setEmail('admin@vanguard.com');
+                setEmail('admin@ckautocentre.com');
               }}
               className={`pb-2.5 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                 role === 'admin' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
@@ -153,7 +153,7 @@ export default function Login() {
                 type="email"
                 required
                 value={email}
-                placeholder="alexander@vanguard.com"
+                placeholder="alexander@ckautocentre.com"
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-white border border-border-hairline px-3.5 py-3 text-xs text-charcoal outline-hidden focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-all"
               />

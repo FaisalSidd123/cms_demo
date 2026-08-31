@@ -49,7 +49,7 @@ const testimonials = [
     id: 3,
     name: 'David K. Stern',
     city: 'New York, NY',
-    quote: 'Vanguard represents the next generation of dealership experience. Straightforward pricing, verified histories, and dedicated professionals.',
+    quote: 'C&K Auto Centre represents the next generation of dealership experience. Straightforward pricing, verified histories, and dedicated professionals.',
     rating: 5
   },
   {
@@ -483,23 +483,21 @@ export default function LandingPage({ vehicles = [], savedVehicleIds = [], onTog
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative h-[350px] md:h-[450px] bg-light-bg overflow-hidden flex items-center justify-center">
             <div ref={aboutImageRef} className="absolute inset-0 w-full h-[120%]">
-              <div className="w-full h-full bg-linear-to-br from-neutral-200 via-neutral-100 to-neutral-200 flex items-center justify-center relative">
-                <div className="absolute inset-8 border border-neutral-400/20 flex flex-col items-center justify-center gap-3">
-                  <ImageIcon className="w-10 h-10 text-neutral-400 stroke-[1.25]" />
-                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400">
-                    [ About Image URL Placeholder ]
-                  </span>
-                </div>
-              </div>
+              <img
+                src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=1200&q=80"
+                alt="C&K Auto Centre Limited Showroom"
+                className="w-full h-full object-cover filter contrast-[1.05]"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
             </div>
             <div className="absolute inset-6 border border-charcoal/5 pointer-events-none" />
           </div>
 
           <div className="text-left">
             <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest mb-1">// Corporate Identity</span>
-            <h2 className="text-3xl md:text-4xl font-display font-extrabold uppercase text-charcoal mb-6">About Vanguard Motors</h2>
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold uppercase text-charcoal mb-6">About C&K Auto Centre Limited</h2>
             <p className="text-xs text-neutral-600 font-sans leading-relaxed mb-4">
-              Founded on the principle of transparency, Vanguard Motors delivers an elite, personalized vehicle procurement service. We bypass traditional dealership friction, connecting discerning buyers with exceptional performance machinery.
+              Founded on the principle of transparency, C&K Auto Centre Limited delivers an elite, personalized vehicle procurement service. We bypass traditional dealership friction, connecting discerning buyers in Montego Bay, St. James with exceptional performance machinery.
             </p>
             <p className="text-xs text-neutral-600 font-sans leading-relaxed mb-10">
               Our inventory profiles represent curated, hand-inspected vehicles. Whether sourcing a track-focused GT series or a premium touring SUV, our global procurement team operates with engineering rigor.

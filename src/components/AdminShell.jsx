@@ -45,7 +45,7 @@ export default function AdminShell({ children }) {
         <div>
           {/* Logo */}
           <Link to="/" className="flex items-center gap-1.5 font-display font-extrabold tracking-widest text-xs uppercase mb-8 pb-3 border-b border-slate-800">
-            <span>Vanguard</span>
+            <span>C&K</span>
             <span className="text-brand-red font-semibold">Master</span>
           </Link>
 
@@ -97,7 +97,7 @@ export default function AdminShell({ children }) {
       {/* 2. MOBILE HEADER BAR */}
       <header className="md:hidden bg-[#0F172A] text-white h-16 px-6 flex justify-between items-center border-b border-slate-800 shrink-0 relative z-30">
         <Link to="/" className="flex items-center gap-1 font-display font-extrabold tracking-widest text-xs uppercase">
-          <span>Vanguard</span>
+          <span>C&K</span>
           <span className="text-brand-red">Master</span>
         </Link>
         <button 

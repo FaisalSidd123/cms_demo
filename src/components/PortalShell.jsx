@@ -25,7 +25,7 @@ export default function PortalShell({ children }) {
   const [notifications, setNotifications] = useState([
     { id: 1, text: 'Escrow payment verified for Mercedes-Benz GLE.', time: '2h ago', unread: true },
     { id: 2, text: 'Bill of Lading document generated for ord-3029.', time: '1d ago', unread: false },
-    { id: 3, text: 'Vanguard registration parameters established.', time: '3d ago', unread: false }
+    { id: 3, text: 'Car Mind registration parameters established.', time: '3d ago', unread: false }
   ]);
 
   const unreadCount = notifications.filter(n => n.unread).length;
@@ -63,8 +63,8 @@ export default function PortalShell({ children }) {
         <div>
           {/* Logo */}
           <Link to="/" className="flex items-center gap-1.5 font-display font-extrabold tracking-widest text-md uppercase mb-10 pb-4 border-b border-white/5">
-            <span>Vanguard</span>
-            <span className="text-brand-red">Motors</span>
+            <span>Car Mind</span>
+            <span className="text-brand-red">Auto</span>
           </Link>
 
           {/* Links */}

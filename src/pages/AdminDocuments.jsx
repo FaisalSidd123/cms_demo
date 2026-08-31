@@ -78,7 +78,7 @@ export default function AdminDocuments({
           id: `adoc-${Math.floor(80 + Math.random() * 20)}`,
           clientId: targetInvoice.clientId,
           type: 'Invoice',
-          fileName: `Vanguard_Escrow_Invoice_${targetInvoice.reservationId}.pdf`,
+          fileName: `CKAutoCentre_Escrow_Invoice_${targetInvoice.reservationId}.pdf`,
           uploadDate: new Date().toISOString(),
           status: 'Approved'
         };

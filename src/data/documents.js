@@ -3,7 +3,7 @@ export const documents = [
     id: 'doc-101',
     orderId: 'ord-3029',
     type: 'Invoice',
-    fileName: 'VANGUARD_INVOICE_ord-3029.pdf',
+    fileName: 'CARMIND_INVOICE_ord-3029.pdf',
     issueDate: '2026-06-26T09:30:00Z',
     fileSizeLabel: '142 KB'
   },
@@ -27,7 +27,7 @@ export const documents = [
     id: 'doc-104',
     orderId: 'ord-4190',
     type: 'Invoice',
-    fileName: 'VANGUARD_INVOICE_ord-4190.pdf',
+    fileName: 'CARMIND_INVOICE_ord-4190.pdf',
     issueDate: '2026-07-01T10:15:00Z',
     fileSizeLabel: '138 KB'
   }

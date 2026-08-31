@@ -44,8 +44,8 @@ export default function Navbar() {
           {/* Dealership Logo */}
           <div className="flex items-center">
             <a href="#" className="flex items-center gap-1.5 font-display font-extrabold tracking-widest text-lg md:text-xl uppercase">
-              <span className={isScrolled ? 'text-charcoal' : 'text-white'}>Vanguard</span>
-              <span className="text-brand-red">Motors</span>
+              <span className={isScrolled ? 'text-charcoal' : 'text-white'}>C&K</span>
+              <span className="text-brand-red">Auto Centre</span>
             </a>
           </div>
 
@@ -139,7 +139,7 @@ export default function Navbar() {
               <div>
                 <div className="flex justify-between items-center mb-10">
                   <span className="font-display font-extrabold tracking-widest text-lg text-charcoal uppercase">
-                    Vanguard <span className="text-brand-red">Motors</span>
+                    C&K <span className="text-brand-red">Auto Centre</span>
                   </span>
                   <button 
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -173,7 +173,7 @@ export default function Navbar() {
                 </a>
                 <div className="flex items-center gap-2 justify-center text-xs text-neutral-500 font-medium">
                   <Phone className="w-4 h-4 text-brand-red" />
-                  <span>+1 (800) 555-0199</span>
+                  <span>1 876-364-0470</span>
                 </div>
               </div>
             </motion.div>

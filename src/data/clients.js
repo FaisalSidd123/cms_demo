@@ -2,7 +2,7 @@ export const clients = [
   {
     id: 'cust-9428',
     name: 'Alexander Sterling',
-    email: 'alexander.sterling@vanguard.com',
+    email: 'alexander.sterling@carmindauto.com',
     phone: '+1 (305) 555-0144',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&q=80',
     assignedAgentId: 'agent-101',

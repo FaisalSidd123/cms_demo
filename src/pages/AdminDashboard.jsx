@@ -34,10 +34,10 @@ export default function AdminDashboard() {
 
   // Agent leaderboard roster
   const roster = [
-    { name: 'Ellen Ripley', email: 'ellen.ripley@vanguardmotors.com', closed: 5, revenue: '$492,000', revenueNum: 492000, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&q=80' },
-    { name: 'Sarah Connor', email: 'sarah.connor@vanguardmotors.com', closed: 4, revenue: '$384,500', revenueNum: 384500, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&q=80' },
-    { name: 'John Connor', email: 'john.connor@vanguardmotors.com', closed: 2, revenue: '$184,000', revenueNum: 184000, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80' },
-    { name: 'Kyle Reese', email: 'kyle.reese@vanguardmotors.com', closed: 1, revenue: '$89,000', revenueNum: 89000, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&q=80' }
+    { name: 'Ellen Ripley', email: 'ellen.ripley@ckautocentre.com', closed: 5, revenue: '$492,000', revenueNum: 492000, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&q=80' },
+    { name: 'Sarah Connor', email: 'sarah.connor@ckautocentre.com', closed: 4, revenue: '$384,500', revenueNum: 384500, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&q=80' },
+    { name: 'John Connor', email: 'john.connor@ckautocentre.com', closed: 2, revenue: '$184,000', revenueNum: 184000, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80' },
+    { name: 'Kyle Reese', email: 'kyle.reese@ckautocentre.com', closed: 1, revenue: '$89,000', revenueNum: 89000, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&q=80' }
   ];
 
   const maxRevenue = Math.max(...roster.map(a => a.revenueNum));

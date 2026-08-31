@@ -166,7 +166,7 @@ export default function AgentActivityLog({ sharedActivities = [], onUpdateActivi
                     <div className="flex-1 flex flex-col text-left">
                       <div className="flex justify-between items-baseline gap-4">
                         <span className="font-display font-bold uppercase tracking-wider text-[11px] text-charcoal">
-                          {client?.name || 'Vanguard Administration'}
+                          {client?.name || 'Car Mind Administration'}
                         </span>
                         <span className="font-mono text-[8px] text-neutral-400 uppercase">
                           {new Date(log.timestamp).toLocaleDateString()} at {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

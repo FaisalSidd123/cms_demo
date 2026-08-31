@@ -73,10 +73,10 @@ function Footer() {
         {/* Column 1: Brand Logo & Description */}
         <div>
           <span className="font-display font-extrabold tracking-widest text-lg uppercase block mb-4">
-            Vanguard <span className="text-brand-red">Motors</span>
+            C&K <span className="text-brand-red">Auto Centre</span>
           </span>
           <p className="text-xs text-neutral-400 font-sans leading-relaxed mb-6">
-            Curated luxury and performance vehicle procurement pipelines. Delivered straight to your coordinates.
+            Quality vehicles, trusted service.
           </p>
           <div className="flex items-center gap-3">
             <a href="#" aria-label="Instagram" className="p-2 bg-neutral-800 hover:bg-brand-red transition-colors text-white flex items-center justify-center">
@@ -133,15 +133,15 @@ function Footer() {
           <ul className="flex flex-col gap-3 font-sans text-xs text-neutral-400">
             <li>
               <span className="font-mono text-[9px] uppercase tracking-wider block text-neutral-500 mb-0.5">Phone</span>
-              <span>+1 (800) 555-0199</span>
+              <span>1 876-364-0470</span>
             </li>
             <li>
               <span className="font-mono text-[9px] uppercase tracking-wider block text-neutral-500 mb-0.5">Email</span>
-              <span>advisors@vanguardmotors.com</span>
+              <span>advisors@ckautocentre.com</span>
             </li>
             <li>
               <span className="font-mono text-[9px] uppercase tracking-wider block text-neutral-500 mb-0.5">Address</span>
-              <span>400 Vanguard Way, Suite 800<br />Miami, FL 33101</span>
+              <span>80C Queens Drive, Montego Bay, St. James</span>
             </li>
           </ul>
         </div>
@@ -150,7 +150,7 @@ function Footer() {
 
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8 border-t border-neutral-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
-        <span>© 2026 VANGUARD MOTORS. ALL RIGHTS RESERVED.</span>
+        <span>© 2026 C&K AUTO CENTRE LIMITED. ALL RIGHTS RESERVED.</span>
         <div className="flex gap-4">
           <a href="#" className="hover:text-brand-red transition-colors">Privacy Policy</a>
           <span>•</span>
@@ -230,7 +230,7 @@ export default function App() {
       ],
       agent: {
         name: 'Sarah Connor',
-        contact: 'sarah.connor@vanguardmotors.com'
+        contact: 'sarah.connor@carmindauto.com'
       }
     };
 

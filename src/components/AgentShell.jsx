@@ -52,7 +52,7 @@ export default function AgentShell({ children }) {
         <div>
           {/* Logo */}
           <Link to="/" className="flex items-center gap-1.5 font-display font-extrabold tracking-widest text-xs uppercase mb-8 pb-3 border-b border-white/5">
-            <span>Vanguard</span>
+            <span>Car Mind</span>
             <span className="text-brand-red font-semibold">Console</span>
           </Link>
 
@@ -118,7 +118,7 @@ export default function AgentShell({ children }) {
       {/* 2. MOBILE HEADER BAR */}
       <header className="md:hidden bg-charcoal text-white h-16 px-6 flex justify-between items-center border-b border-neutral-800 shrink-0 relative z-30">
         <Link to="/" className="flex items-center gap-1 font-display font-extrabold tracking-widest text-xs uppercase">
-          <span>Vanguard</span>
+          <span>Car Mind</span>
           <span className="text-brand-red">Console</span>
         </Link>
 

@@ -413,7 +413,7 @@ export default function AdminInventory({ sharedVehicles = [], onUpdateVehicles }
                                 <div className="flex justify-between items-center bg-white border border-neutral-100 p-2 rounded-2xs">
                                   <span className="flex items-center gap-1.5">
                                     <FileText className="w-3.5 h-3.5 text-neutral-400" />
-                                    <span>Vanguard_Inspection_Certificate.pdf</span>
+                                    <span>CKAutoCentre_Inspection_Certificate.pdf</span>
                                   </span>
                                   <span className="text-green-600 font-bold">Approved</span>
                                 </div>

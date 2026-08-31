@@ -2,7 +2,7 @@ export const adminUsers = [
   {
     id: 'adm-01',
     name: 'Chief Executive Operator',
-    email: 'admin@vanguard.com',
+    email: 'admin@carmindauto.com',
     role: 'Super Admin', // Super Admin / Manager / Support
     status: 'Active',
     joinedDate: '2022-01-10T09:00:00Z',
@@ -17,7 +17,7 @@ export const adminUsers = [
   {
     id: 'adm-02',
     name: 'Robert Vance',
-    email: 'robert.vance@vanguard.com',
+    email: 'robert.vance@carmindauto.com',
     role: 'Manager',
     status: 'Active',
     joinedDate: '2023-05-14T09:00:00Z',
@@ -32,7 +32,7 @@ export const adminUsers = [
   {
     id: 'adm-03',
     name: 'James Logan',
-    email: 'james.logan@vanguard.com',
+    email: 'james.logan@carmindauto.com',
     role: 'Support',
     status: 'Active',
     joinedDate: '2024-11-20T10:00:00Z',
