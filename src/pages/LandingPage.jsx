@@ -49,7 +49,7 @@ const testimonials = [
     id: 3,
     name: 'David K. Stern',
     city: 'New York, NY',
-    quote: 'C&K Auto Centre represents the next generation of dealership experience. Straightforward pricing, verified histories, and dedicated professionals.',
+    quote: 'Kisaco Auto Sales represents the next generation of dealership experience. Straightforward pricing, verified histories, and dedicated professionals.',
     rating: 5
   },
   {
@@ -485,7 +485,7 @@ export default function LandingPage({ vehicles = [], savedVehicleIds = [], onTog
             <div ref={aboutImageRef} className="absolute inset-0 w-full h-[120%]">
               <img
                 src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=1200&q=80"
-                alt="C&K Auto Centre Limited Showroom"
+                alt="Kisaco Auto Sales Ltd Showroom"
                 className="w-full h-full object-cover filter contrast-[1.05]"
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
@@ -495,9 +495,16 @@ export default function LandingPage({ vehicles = [], savedVehicleIds = [], onTog
 
           <div className="text-left">
             <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest mb-1">// Corporate Identity</span>
-            <h2 className="text-3xl md:text-4xl font-display font-extrabold uppercase text-charcoal mb-6">About C&K Auto Centre Limited</h2>
+            <div className="flex items-center gap-4 mb-6">
+              <img 
+                src="/logo.jpg" 
+                alt="Kisaco Auto Sales Ltd" 
+                className="w-14 h-14 rounded-full object-cover border-2 border-brand-red shadow-md shrink-0" 
+              />
+              <h2 className="text-3xl md:text-4xl font-display font-extrabold uppercase text-charcoal">About Kisaco Auto Sales Ltd</h2>
+            </div>
             <p className="text-xs text-neutral-600 font-sans leading-relaxed mb-4">
-              Founded on the principle of transparency, C&K Auto Centre Limited delivers an elite, personalized vehicle procurement service. We bypass traditional dealership friction, connecting discerning buyers in Montego Bay, St. James with exceptional performance machinery.
+              Founded on the principle of transparency, Kisaco Auto Sales Ltd delivers an elite, personalized vehicle procurement service. We bypass traditional dealership friction, connecting discerning buyers in Kingston with exceptional performance machinery.
             </p>
             <p className="text-xs text-neutral-600 font-sans leading-relaxed mb-10">
               Our inventory profiles represent curated, hand-inspected vehicles. Whether sourcing a track-focused GT series or a premium touring SUV, our global procurement team operates with engineering rigor.

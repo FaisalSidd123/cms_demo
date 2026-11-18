@@ -21,13 +21,14 @@ export default function AgentClients() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Load clients, reservations, vehicles, and activity logs
+  // Load clients, reservations, vehicles, activity logs, and transactions
   const { data: initialClients, isLoading: clientsLoading } = useMockData('clients');
   const { data: initialReservations, isLoading: resLoading } = useMockData('reservations');
   const { data: initialVehicles, isLoading: vehiclesLoading } = useMockData('vehicles');
   const { data: initialActivities, isLoading: actLoading } = useMockData('activityLog');
+  const { data: initialTransactions, isLoading: txLoading } = useMockData('transactions');
 
-  const isLoading = clientsLoading || resLoading || vehiclesLoading || actLoading;
+  const isLoading = clientsLoading || resLoading || vehiclesLoading || actLoading || txLoading;
 
   // Local states to handle live additions
   const [clientsList, setClientsList] = useState([]);
@@ -35,7 +36,7 @@ export default function AgentClients() {
   const [noteText, setNoteText] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
-  const [activeTab, setActiveTab] = useState('notes');
+  const [activeTab, setActiveTab] = useState('deals');
   const [toastMsg, setToastMsg] = useState('');
 
   // Sync state with source mock data
@@ -92,6 +93,7 @@ export default function AgentClients() {
     const clientReservations = initialReservations?.filter(r => r.clientId === id) || [];
     const clientActivities = activities.filter(a => a.clientId === id);
     const clientNotes = clientActivities.filter(a => a.type === 'Note');
+    const clientTransactions = initialTransactions?.filter(t => t.customerId === id) || [];
 
     return (
       <div className="space-y-8 text-left relative">
@@ -130,58 +132,116 @@ export default function AgentClients() {
             </div>
           </div>
 
-          {/* Quick Actions Panel */}
-          <div className="flex flex-wrap gap-3">
-            <Link
-              to="/agent/reserve"
-              state={{ preselectedClientId: client.id }}
-              className="bg-brand-red hover:bg-brand-red-hover text-white text-xs font-bold uppercase tracking-widest px-5 py-3 transition-colors"
-            >
-              Reserve Vehicle
-            </Link>
-            <Link
-              to="/agent/documents"
-              state={{ preselectedClientId: client.id, requestInvoice: true }}
-              className="border border-neutral-200 hover:border-charcoal hover:bg-neutral-50 text-charcoal text-xs font-bold uppercase tracking-widest px-5 py-3 transition-colors"
-            >
-              Request Invoice
-            </Link>
+          {/* Client Contact Info */}
+          <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-neutral-500">
+            <div className="flex items-center gap-1.5 bg-neutral-50 border border-neutral-200 px-3 py-2 rounded-xs">
+              <Mail className="w-3.5 h-3.5 text-neutral-400" />
+              <span>{client.email}</span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-neutral-50 border border-neutral-200 px-3 py-2 rounded-xs">
+              <Phone className="w-3.5 h-3.5 text-neutral-400" />
+              <span>{client.phone}</span>
+            </div>
           </div>
         </div>
 
         {/* Content Tabs & Form */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           
-          {/* Left panel tabs: Hold history & purchase lists */}
+          {/* Left panel tabs: Deals, Holds, Notes */}
           <div className="lg:col-span-2 bg-white border border-border-hairline p-6 shadow-xs min-h-[300px]">
             
             {/* Tabs toggle */}
-            <div className="flex border-b border-neutral-100 mb-6 gap-6 select-none">
+            <div className="flex border-b border-neutral-100 mb-6 gap-6 select-none overflow-x-auto">
+              <button
+                onClick={() => setActiveTab('deals')}
+                className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
+                  activeTab === 'deals' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
+                }`}
+              >
+                Deals & Purchases ({clientTransactions.length})
+              </button>
               <button
                 onClick={() => setActiveTab('reservations')}
-                className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 ${
+                className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                   activeTab === 'reservations' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
                 }`}
               >
-                Holds ({clientReservations.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('history')}
-                className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 ${
-                  activeTab === 'history' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
-                }`}
-              >
-                Purchase History ({client.purchaseHistory.length})
+                Vehicle Holds ({clientReservations.length})
               </button>
               <button
                 onClick={() => setActiveTab('notes')}
-                className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 ${
+                className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                   activeTab === 'notes' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
                 }`}
               >
                 CRM Notes ({clientNotes.length})
               </button>
             </div>
+
+            {/* TAB: Deals & Escrow */}
+            {activeTab === 'deals' && (
+              <div className="space-y-4">
+                {clientTransactions.length > 0 ? (
+                  clientTransactions.map(tx => (
+                    <div key={tx.id} className="p-4 border border-neutral-200 rounded-xs bg-neutral-50/50 space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={tx.vehicleImage}
+                            alt={tx.vehicleModel}
+                            className="w-12 h-9 object-cover rounded-xs border border-neutral-200 shrink-0"
+                          />
+                          <div>
+                            <span className="font-display font-bold uppercase text-xs text-charcoal block">
+                              {tx.vehicleModel} ({tx.vehicleYear})
+                            </span>
+                            <span className="text-[9px] font-mono text-neutral-400 block">
+                              {tx.id} • VIN: {tx.vehicleVin}
+                            </span>
+                          </div>
+                        </div>
+
+                        <span className={`text-[8px] font-mono uppercase px-2 py-0.5 rounded-2xs font-bold ${
+                          tx.paymentStatus === 'Paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                        }`}>
+                          {tx.paymentStatus}
+                        </span>
+                      </div>
+
+                      {/* Payment separation strip */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[9px] font-mono bg-white p-2.5 rounded-xs border border-neutral-100">
+                        <div>
+                          <span className="text-neutral-400 uppercase block">Base Price</span>
+                          <strong className="text-charcoal block">{tx.basePrice}</strong>
+                        </div>
+                        <div>
+                          <span className="text-neutral-400 uppercase block">Escrow Hold</span>
+                          <strong className="text-blue-600 block">{tx.paymentBreakdown?.escrowHoldDeposit || '$5,000'}</strong>
+                        </div>
+                        <div>
+                          <span className="text-neutral-400 uppercase block">Paid Cleared</span>
+                          <strong className="text-emerald-700 block">{tx.amountPaid}</strong>
+                        </div>
+                        <div>
+                          <span className="text-neutral-400 uppercase block">Balance Due</span>
+                          <strong className="text-brand-red block">{tx.balanceDue}</strong>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between items-center text-[10px] font-mono text-neutral-500 pt-1">
+                        <span>Escrow: <strong className="text-charcoal">{tx.escrowStatus}</strong></span>
+                        <span>Docs: <strong className="text-charcoal">{tx.documents?.length || 0} Attached</strong></span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-12 text-neutral-400 text-xs font-sans">
+                    No active car transactions registered for this client.
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* TAB: Reservations */}
             {activeTab === 'reservations' && (
@@ -207,35 +267,6 @@ export default function AgentClients() {
                   })
                 ) : (
                   <div className="text-center py-12 text-neutral-400 text-xs font-sans">No holds found for this lead.</div>
-                )}
-              </div>
-            )}
-
-            {/* TAB: Purchase History */}
-            {activeTab === 'history' && (
-              <div className="space-y-4">
-                {client.purchaseHistory.length > 0 ? (
-                  client.purchaseHistory.map(purId => {
-                    return (
-                      <div key={purId} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border border-neutral-100 gap-4">
-                        <div className="flex items-center gap-3">
-                          <FileSpreadsheet className="w-5 h-5 text-green-600" />
-                          <div className="text-left">
-                            <span className="font-display font-bold text-xs uppercase text-charcoal">Acquisition ID: {purId}</span>
-                            <span className="text-[9px] font-mono text-neutral-400 block uppercase mt-0.5">Ledger complete</span>
-                          </div>
-                        </div>
-                        <Link 
-                          to="/agent/documents"
-                          className="text-[9px] font-mono text-brand-red uppercase font-bold hover:underline"
-                        >
-                          Invoice Log
-                        </Link>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="text-center py-12 text-neutral-400 text-xs font-sans">No completed purchases.</div>
                 )}
               </div>
             )}

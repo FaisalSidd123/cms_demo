@@ -8,8 +8,6 @@ import {
   Edit, 
   FileText, 
   UploadCloud, 
-  Eye, 
-  EyeOff, 
   Check, 
   X,
   FileSpreadsheet
@@ -36,14 +34,38 @@ export default function AdminInventory({ sharedVehicles = [], onUpdateVehicles }
   // Bulk Upload state
   const [bulkUploadedData, setBulkUploadedData] = useState(null);
 
-  // Expands details per row
-  const [expandedRowId, setExpandedRowId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
   const [toastMsg, setToastMsg] = useState('');
 
   const triggerToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(''), 3000);
   };
+
+  const handleExportInventoryCsv = () => {
+    const headers = ['ID,Make,Model,Year,Price,Mileage,BodyType,Location,Status\n'];
+    const rows = filteredVehicles.map(v =>
+      `"${v.id}","${v.make}","${v.model}","${v.year}","${v.price}","${v.mileage}","${v.bodyType || 'Sedan'}","${v.location || 'Miami Depot'}","${v.status}"`
+    );
+    const blob = new Blob([headers + rows.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `CAR_MINDS_INVENTORY_FLEET_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    triggerToast('Inventory fleet spreadsheet exported.');
+  };
+
+  const filteredVehicles = vehicles.filter(v => {
+    const matchesSearch =
+      (v.model || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (v.make || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (v.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      `VIN-${v.id}`.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'All' || v.status === statusFilter.toLowerCase();
+    return matchesSearch && matchesStatus;
+  });
 
   // Inline status dropdown handler
   const handleStatusChange = (vehicleId, newStatus) => {
@@ -304,6 +326,45 @@ export default function AdminInventory({ sharedVehicles = [], onUpdateVehicles }
         )}
       </div>
 
+      {/* Filters & Search Toolbar */}
+      <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 bg-white border border-border-hairline p-4 shadow-xs">
+        <div className="flex flex-wrap gap-2 text-xs font-mono">
+          {['All', 'Available', 'Reserved', 'Sold'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setStatusFilter(tab)}
+              className={`px-3 py-1.5 rounded-xs font-bold uppercase transition-all cursor-pointer ${
+                statusFilter === tab
+                  ? 'bg-charcoal text-white shadow-xs'
+                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+              }`}
+            >
+              {tab} ({tab === 'All' ? vehicles.length : vehicles.filter(v => v.status === tab.toLowerCase()).length})
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="relative flex-1 md:w-64">
+            <input
+              type="text"
+              placeholder="Search make, model, VIN..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-light-bg border border-border-hairline px-3 py-1.5 text-xs text-charcoal outline-hidden focus:border-brand-red font-sans"
+            />
+          </div>
+
+          <button
+            onClick={handleExportInventoryCsv}
+            className="flex items-center gap-1.5 bg-neutral-100 hover:bg-neutral-200 text-charcoal px-3 py-1.5 text-xs font-mono font-bold uppercase rounded-xs transition-colors cursor-pointer shrink-0"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-neutral-500" />
+            <span>Export CSV</span>
+          </button>
+        </div>
+      </div>
+
       {/* Inventory table */}
       <div className="bg-white border border-border-hairline shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
@@ -311,135 +372,74 @@ export default function AdminInventory({ sharedVehicles = [], onUpdateVehicles }
             <thead>
               <tr className="bg-neutral-50 border-b border-border-hairline text-[9px] font-mono text-neutral-400 uppercase tracking-widest select-none">
                 <th className="py-4 px-6 font-semibold">Thumbnail</th>
-                <th className="py-4 px-6 font-semibold">Vehicle</th>
+                <th className="py-4 px-6 font-semibold">Vehicle & VIN</th>
                 <th className="py-4 px-6 font-semibold">Price</th>
-                <th className="py-4 px-6 font-semibold">Mileage</th>
+                <th className="py-4 px-6 font-semibold">Mileage & Location</th>
                 <th className="py-4 px-6 font-semibold">Status Dropdown</th>
                 <th className="py-4 px-6 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border-hairline text-xs">
-              {vehicles.map((v) => {
-                const isExpanded = expandedRowId === v.id;
-                return (
-                  <React.Fragment key={v.id}>
-                    <tr className="hover:bg-neutral-50/50 transition-colors">
-                      {/* Image */}
-                      <td className="py-4 px-6">
-                        <div className="w-12 h-8 bg-neutral-100 rounded-sm overflow-hidden shrink-0 border border-neutral-200/50">
-                          <img src={v.thumbnailImage} alt={v.model} className="w-full h-full object-cover" />
-                        </div>
-                      </td>
+              {filteredVehicles.map((v) => (
+                <tr key={v.id} className="hover:bg-neutral-50/50 transition-colors">
+                  {/* Image */}
+                  <td className="py-4 px-6">
+                    <div className="w-14 h-9 bg-neutral-100 rounded-sm overflow-hidden shrink-0 border border-neutral-200/50 shadow-2xs">
+                      <img src={v.thumbnailImage} alt={v.model} className="w-full h-full object-cover" />
+                    </div>
+                  </td>
 
-                      {/* Info */}
-                      <td className="py-4 px-6 font-medium text-charcoal">
-                        <span className="font-display font-bold uppercase tracking-wider text-[11px] block">
-                          {v.make} {v.model}
-                        </span>
-                        <span className="text-[8px] font-mono text-neutral-400 block uppercase mt-0.5">Year: {v.year} | Ref: VIN-{v.id}</span>
-                      </td>
+                  {/* Info */}
+                  <td className="py-4 px-6 font-medium text-charcoal">
+                    <span className="font-display font-bold uppercase tracking-wider text-[11px] block">
+                      {v.make} {v.model}
+                    </span>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-[9px] font-mono text-neutral-400 uppercase">Year: {v.year}</span>
+                      <span className="text-[9px] font-mono bg-neutral-100 text-neutral-600 px-1.5 py-0.2 rounded-2xs">
+                        VIN-{v.id.toString().padStart(4, '0')}
+                      </span>
+                    </div>
+                  </td>
 
-                      {/* Price */}
-                      <td className="py-4 px-6 font-display font-bold text-brand-red text-xs">
-                        {v.price}
-                      </td>
+                  {/* Price */}
+                  <td className="py-4 px-6 font-display font-bold text-brand-red text-xs">
+                    {v.price}
+                  </td>
 
-                      {/* Mileage */}
-                      <td className="py-4 px-6 font-mono text-neutral-500">
-                        {v.mileage}
-                      </td>
+                  {/* Mileage & Location */}
+                  <td className="py-4 px-6 font-mono text-neutral-500">
+                    <span>{v.mileage}</span>
+                    <span className="text-[9px] font-mono text-neutral-400 block mt-0.5">
+                      {v.location || 'Kingston Depot'}
+                    </span>
+                  </td>
 
-                      {/* Editable Inline Status Dropdown */}
-                      <td className="py-4 px-6">
-                        <select
-                          value={v.status}
-                          onChange={(e) => handleStatusChange(v.id, e.target.value)}
-                          className="bg-white border border-neutral-200 px-2 py-1 text-[10px] font-mono uppercase tracking-wider cursor-pointer text-neutral-700 outline-hidden focus:border-brand-red"
-                        >
-                          <option value="available">Available</option>
-                          <option value="reserved">Reserved</option>
-                          <option value="sold">Sold</option>
-                        </select>
-                      </td>
+                  {/* Editable Inline Status Dropdown */}
+                  <td className="py-4 px-6">
+                    <select
+                      value={v.status}
+                      onChange={(e) => handleStatusChange(v.id, e.target.value)}
+                      className="bg-white border border-neutral-200 px-2 py-1 text-[10px] font-mono uppercase tracking-wider cursor-pointer text-neutral-700 outline-hidden focus:border-brand-red"
+                    >
+                      <option value="available">Available</option>
+                      <option value="reserved">Reserved</option>
+                      <option value="sold">Sold</option>
+                    </select>
+                  </td>
 
-                      {/* Actions */}
-                      <td className="py-4 px-6 text-right flex items-center justify-end gap-2.5 h-16">
-                        <button
-                          onClick={() => setExpandedRowId(isExpanded ? null : v.id)}
-                          className="p-1.5 border border-neutral-200 text-neutral-400 hover:text-charcoal hover:bg-neutral-50 cursor-pointer flex items-center justify-center"
-                          title="Inspect Documents & Specs"
-                        >
-                          {isExpanded ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                        </button>
-                        <button
-                          onClick={() => handleDelete(v.id)}
-                          className="p-1.5 border border-neutral-200 text-neutral-400 hover:text-red-600 hover:bg-red-50 cursor-pointer flex items-center justify-center"
-                          title="Delete Vehicle"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-
-                    {/* Expand Detail Subview Row */}
-                    {isExpanded && (
-                      <tr>
-                        <td colSpan={6} className="bg-neutral-50/50 p-6 border-b border-border-hairline text-left">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                            
-                            {/* Specs list */}
-                            <div>
-                              <span className="font-display font-bold text-[9px] uppercase tracking-wider text-charcoal mb-2.5 block">
-                                Specifications checklist
-                              </span>
-                              <div className="flex flex-wrap gap-1.5">
-                                {v.specs?.map((spec) => (
-                                  <span key={spec} className="px-2 py-0.5 bg-white border border-neutral-200 text-neutral-600 rounded-sm text-[9px] font-mono uppercase">
-                                    {spec}
-                                  </span>
-                                ))}
-                              </div>
-                              <span className="text-[9px] text-neutral-400 font-mono block mt-4 uppercase">Condition notes</span>
-                              <p className="text-neutral-600 italic font-sans mt-1">{v.conditionNotes}</p>
-                            </div>
-
-                            {/* Mock photos / inspection logs */}
-                            <div>
-                              <span className="font-display font-bold text-[9px] uppercase tracking-wider text-charcoal mb-2.5 block">
-                                Files & Asset checks
-                              </span>
-                              
-                              <div className="space-y-2 font-mono text-[9px] uppercase text-neutral-500 tracking-wider">
-                                <div className="flex justify-between items-center bg-white border border-neutral-100 p-2 rounded-2xs">
-                                  <span className="flex items-center gap-1.5">
-                                    <FileText className="w-3.5 h-3.5 text-neutral-400" />
-                                    <span>CKAutoCentre_Inspection_Certificate.pdf</span>
-                                  </span>
-                                  <span className="text-green-600 font-bold">Approved</span>
-                                </div>
-                                <div className="flex justify-between items-center bg-white border border-neutral-100 p-2 rounded-2xs">
-                                  <span className="flex items-center gap-1.5">
-                                    <FileText className="w-3.5 h-3.5 text-neutral-400" />
-                                    <span>Clear_Title_Verification.pdf</span>
-                                  </span>
-                                  <span className="text-green-600 font-bold">Approved</span>
-                                </div>
-                              </div>
-
-                              <div className="mt-3.5 flex gap-2">
-                                <button onClick={() => triggerToast('Mock asset log registered.')} className="border border-neutral-200 hover:border-charcoal bg-white text-charcoal text-[9px] font-mono uppercase tracking-widest px-3 py-1.5 cursor-pointer">
-                                  Add Document Scan
-                                </button>
-                              </div>
-                            </div>
-
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                );
-              })}
+                  {/* Actions */}
+                  <td className="py-4 px-6 text-right">
+                    <button
+                      onClick={() => handleDelete(v.id)}
+                      className="p-1.5 border border-neutral-200 text-neutral-400 hover:text-red-600 hover:bg-red-50 cursor-pointer inline-flex items-center justify-center transition-colors rounded-xs"
+                      title="Delete Vehicle"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

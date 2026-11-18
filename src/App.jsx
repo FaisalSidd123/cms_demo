@@ -46,6 +46,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminInventory from './pages/AdminInventory';
 import AdminUsers from './pages/AdminUsers';
 import AdminTransactions from './pages/AdminTransactions';
+import AdminPayments from './pages/AdminPayments';
 import AdminDocuments from './pages/AdminDocuments';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -72,11 +73,18 @@ function Footer() {
 
         {/* Column 1: Brand Logo & Description */}
         <div>
-          <span className="font-display font-extrabold tracking-widest text-lg uppercase block mb-4">
-            C&K <span className="text-brand-red">Auto Centre</span>
-          </span>
+          <div className="flex items-center gap-3 mb-4">
+            <img 
+              src="/logo.jpg" 
+              alt="Kisaco Auto Sales Ltd" 
+              className="w-12 h-12 rounded-full object-cover border border-white/20 shadow-md" 
+            />
+            <span className="font-display font-extrabold tracking-widest text-lg uppercase block">
+              Kisaco <span className="text-brand-red">Auto Sales</span>
+            </span>
+          </div>
           <p className="text-xs text-neutral-400 font-sans leading-relaxed mb-6">
-            Quality vehicles, trusted service.
+            Quality vehicles, trusted service. Certified luxury and performance sales in Kingston.
           </p>
           <div className="flex items-center gap-3">
             <a href="#" aria-label="Instagram" className="p-2 bg-neutral-800 hover:bg-brand-red transition-colors text-white flex items-center justify-center">
@@ -133,15 +141,15 @@ function Footer() {
           <ul className="flex flex-col gap-3 font-sans text-xs text-neutral-400">
             <li>
               <span className="font-mono text-[9px] uppercase tracking-wider block text-neutral-500 mb-0.5">Phone</span>
-              <span>1 876-364-0470</span>
+              <span>1 876-556-2513</span>
             </li>
             <li>
               <span className="font-mono text-[9px] uppercase tracking-wider block text-neutral-500 mb-0.5">Email</span>
-              <span>advisors@ckautocentre.com</span>
+              <span>advisors@kisacoauto.com</span>
             </li>
             <li>
               <span className="font-mono text-[9px] uppercase tracking-wider block text-neutral-500 mb-0.5">Address</span>
-              <span>80C Queens Drive, Montego Bay, St. James</span>
+              <span>60 Montgomery Avenue, Richmond Park, Kingston</span>
             </li>
           </ul>
         </div>
@@ -150,7 +158,7 @@ function Footer() {
 
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-8 border-t border-neutral-800 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
-        <span>© 2026 C&K AUTO CENTRE LIMITED. ALL RIGHTS RESERVED.</span>
+        <span>© 2026 KISACO AUTO SALES LTD. ALL RIGHTS RESERVED.</span>
         <div className="flex gap-4">
           <a href="#" className="hover:text-brand-red transition-colors">Privacy Policy</a>
           <span>•</span>
@@ -175,6 +183,7 @@ export default function App() {
   const [invoicesList, setInvoicesList] = useState(initialInvoices);
   const [docsList, setDocsList] = useState(initialDocs);
   const [adminAuditList, setAdminAuditList] = useState(initialAudits);
+  const [transactionsList, setTransactionsList] = useState(initialTransactions);
 
   // Initialize Lenis Smooth Scrolling
   useEffect(() => {
@@ -230,7 +239,7 @@ export default function App() {
       ],
       agent: {
         name: 'Sarah Connor',
-        contact: 'sarah.connor@carmindauto.com'
+        contact: 'sarah.connor@kisacoauto.com'
       }
     };
 
@@ -288,10 +297,10 @@ export default function App() {
             <PortalShell>
               <Routes>
                 <Route path="/" element={<PortalDashboard />} />
-                <Route path="/orders" element={<PortalOrders />} />
-                <Route path="/orders/:id" element={<PortalOrders />} />
-                <Route path="/documents" element={<PortalDocuments />} />
                 <Route path="/purchases" element={<PortalPurchases />} />
+                <Route path="/orders" element={<PortalPurchases />} />
+                <Route path="/orders/:id" element={<PortalPurchases />} />
+                <Route path="/documents" element={<PortalDocuments />} />
                 <Route path="/wishlist" element={<PortalWishlist />} />
                 <Route path="/profile" element={<PortalProfile />} />
               </Routes>
@@ -378,10 +387,31 @@ export default function App() {
                       onUpdateAgents={setAgentsList}
                       sharedReservations={reservationsList}
                       sharedActivities={activitiesList}
+                      sharedTransactions={transactionsList}
+                      sharedVehicles={vehiclesList}
                     />
                   }
                 />
-                <Route path="/transactions" element={<AdminTransactions />} />
+                <Route 
+                  path="/transactions" 
+                  element={
+                    <AdminTransactions 
+                      sharedTransactions={transactionsList}
+                      onUpdateTransactions={setTransactionsList}
+                      sharedVehicles={vehiclesList}
+                      sharedClients={clientsList}
+                    />
+                  } 
+                />
+                <Route
+                  path="/payments"
+                  element={
+                    <AdminPayments
+                      sharedTransactions={transactionsList}
+                      onUpdateTransactions={setTransactionsList}
+                    />
+                  }
+                />
                 <Route
                   path="/documents"
                   element={

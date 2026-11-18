@@ -11,7 +11,8 @@ import {
   LogOut, 
   Menu, 
   X,
-  UserCheck
+  UserCheck,
+  CreditCard
 } from 'lucide-react';
 import { adminUsers } from '../data/adminUsers';
 
@@ -27,6 +28,7 @@ export default function AdminShell({ children }) {
     { label: 'Inventory', path: '/admin/inventory', icon: Car },
     { label: 'Customers & Agents', path: '/admin/users', icon: Users },
     { label: 'Transactions', path: '/admin/transactions', icon: DollarSign },
+    { label: 'Payments', path: '/admin/payments', icon: CreditCard },
     { label: 'Documents', path: '/admin/documents', icon: FolderOpen }
   ];
 
@@ -44,9 +46,16 @@ export default function AdminShell({ children }) {
       <aside className="hidden md:flex flex-col justify-between w-60 bg-[#0F172A] text-white shrink-0 p-5 border-r border-slate-800">
         <div>
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-1.5 font-display font-extrabold tracking-widest text-xs uppercase mb-8 pb-3 border-b border-slate-800">
-            <span>C&K</span>
-            <span className="text-brand-red font-semibold">Master</span>
+          <Link to="/" className="flex items-center gap-2.5 font-display font-extrabold tracking-widest text-xs uppercase mb-8 pb-3 border-b border-slate-800">
+            <img 
+              src="/logo.jpg" 
+              alt="Kisaco Auto Sales Ltd" 
+              className="w-8 h-8 rounded-full object-cover border border-white/20 shadow-xs" 
+            />
+            <div className="flex items-center gap-1">
+              <span>Kisaco</span>
+              <span className="text-brand-red font-semibold">Master</span>
+            </div>
           </Link>
 
           {/* Admin profile card */}
@@ -96,8 +105,13 @@ export default function AdminShell({ children }) {
 
       {/* 2. MOBILE HEADER BAR */}
       <header className="md:hidden bg-[#0F172A] text-white h-16 px-6 flex justify-between items-center border-b border-slate-800 shrink-0 relative z-30">
-        <Link to="/" className="flex items-center gap-1 font-display font-extrabold tracking-widest text-xs uppercase">
-          <span>C&K</span>
+        <Link to="/" className="flex items-center gap-2 font-display font-extrabold tracking-widest text-xs uppercase">
+          <img 
+            src="/logo.jpg" 
+            alt="Kisaco Auto Sales Ltd" 
+            className="w-7 h-7 rounded-full object-cover" 
+          />
+          <span>Kisaco</span>
           <span className="text-brand-red">Master</span>
         </Link>
         <button 

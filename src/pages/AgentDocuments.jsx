@@ -1,367 +1,460 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useMockData } from '../hooks/useMockData';
 import { TableSkeleton } from '../components/Skeletons';
 import { 
   FileCheck, 
-  Plus, 
-  Upload, 
   FileText, 
   Download, 
   Check, 
   Clock, 
-  AlertTriangle,
   FolderOpen,
-  Send
+  Search,
+  Eye,
+  ShieldCheck,
+  X,
+  Car,
+  User
 } from 'lucide-react';
 
 export default function AgentDocuments() {
-  const location = useLocation();
-
-  // Load documents, reservations, clients, and invoice requests
-  const { data: initialDocs, isLoading: docsLoading } = useMockData('agentDocuments');
-  const { data: initialRes, isLoading: resLoading } = useMockData('reservations');
+  const { data: initialTx, isLoading: txLoading } = useMockData('transactions');
   const { data: clientsList, isLoading: clientsLoading } = useMockData('clients');
-  const { data: initialInvoices, isLoading: invoicesLoading } = useMockData('invoiceRequests');
+  const { data: initialDocs, isLoading: docsLoading } = useMockData('agentDocuments');
 
-  const isLoading = docsLoading || resLoading || clientsLoading || invoicesLoading;
+  const isLoading = txLoading || clientsLoading || docsLoading;
 
-  // Local synced states
-  const [docsList, setDocsList] = useState([]);
-  const [invoiceReqs, setInvoiceReqs] = useState([]);
-  const [activeTab, setActiveTab] = useState('documents');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [previewDoc, setPreviewDoc] = useState(null);
   const [toastMsg, setToastMsg] = useState('');
-
-  // Form states
-  const [invoiceResId, setInvoiceResId] = useState('');
-  const [invoiceAmount, setInvoiceAmount] = useState('');
-  const [invoiceNotes, setInvoiceNotes] = useState('');
-
-  const [uploadClientId, setUploadClientId] = useState('');
-  const [uploadDocType, setUploadDocType] = useState('ID Verification');
-  const [uploadFileName, setUploadFileName] = useState('');
-
-  // Sync initial mock data
-  useEffect(() => {
-    if (initialDocs) setDocsList(initialDocs);
-    if (initialInvoices) setInvoiceReqs(initialInvoices);
-  }, [initialDocs, initialInvoices]);
-
-  // Handle redirects from client actions
-  useEffect(() => {
-    if (location.state?.preselectedClientId && location.state?.requestInvoice) {
-      setActiveTab('invoices');
-      // pre-fill reservation if any
-      const matchingRes = initialRes?.find(r => r.clientId === location.state.preselectedClientId);
-      if (matchingRes) setInvoiceResId(matchingRes.id);
-    }
-  }, [location.state, initialRes]);
 
   const triggerToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(''), 3000);
   };
 
-  // Status colors helpers
-  const getDocStatusColor = (status) => {
-    if (status === 'Approved') return 'bg-green-50 text-green-600 border-green-200';
-    return 'bg-amber-50 text-amber-600 border-amber-200';
-  };
+  // Compile all official deal documents linked with vehicle & customer
+  const compiledDocs = [];
 
-  const getInvoiceStatusColor = (status) => {
-    if (status === 'Approved') return 'bg-green-50 text-green-600 border-green-200';
-    if (status === 'Rejected') return 'bg-red-50 text-red-600 border-red-200';
-    return 'bg-amber-50 text-amber-600 border-amber-200';
-  };
+  if (initialTx) {
+    initialTx.forEach(tx => {
+      if (tx.documents && tx.documents.length > 0) {
+        tx.documents.forEach(doc => {
+          compiledDocs.push({
+            id: doc.id,
+            name: doc.name,
+            type: doc.type,
+            fileSize: doc.fileSize || '320 KB',
+            issueDate: doc.issueDate || tx.dueDate,
+            status: doc.status || 'Verified',
+            hash: doc.hash,
+            options: doc.options,
+            // Vehicle link
+            vehicleModel: tx.vehicleModel,
+            vehicleYear: tx.vehicleYear,
+            vehicleVin: tx.vehicleVin,
+            vehicleImage: tx.vehicleImage,
+            txId: tx.id,
+            // Customer link
+            customerName: tx.customerName,
+            customerEmail: tx.customerEmail,
+            customerPhone: tx.customerPhone
+          });
+        });
+      }
+    });
+  }
 
-  // Forms submit
-  const handleRequestInvoice = (e) => {
-    e.preventDefault();
-    if (!invoiceResId || !invoiceAmount) return;
+  // Also include buyer KYC docs with customer link
+  if (initialDocs && clientsList) {
+    initialDocs.forEach(d => {
+      const client = clientsList.find(c => c.id === d.clientId);
+      compiledDocs.push({
+        id: d.id,
+        name: `${d.type} - Certified Buyer File`,
+        type: d.type,
+        fileSize: '450 KB',
+        issueDate: d.uploadDate,
+        status: d.status === 'Approved' ? 'Verified' : d.status,
+        hash: 'SHA256:c948201948201948201948201948201948201948201948201948201948201948',
+        options: { fileFormat: 'PDF/A', encryption: 'AES-256' },
+        vehicleModel: 'Customer Dossier Archive',
+        vehicleYear: '2024',
+        vehicleVin: `KYC-${d.id.toUpperCase()}`,
+        vehicleImage: client?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80',
+        txId: 'KYC-VAULT',
+        customerName: client?.name || 'Assigned Lead',
+        customerEmail: client?.email || 'buyer@kisacoauto.com',
+        customerPhone: client?.phone || '+1 (305) 555-0100'
+      });
+    });
+  }
 
-    const reservation = initialRes?.find(r => r.id === invoiceResId);
-    if (!reservation) return;
+  // Filter documents
+  const filteredDocs = compiledDocs.filter(doc => {
+    const matchesSearch =
+      doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.vehicleModel.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.vehicleVin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doc.customerName.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const newRequest = {
-      id: `inv-req-${Math.floor(600 + Math.random() * 400)}`,
-      reservationId: invoiceResId,
-      clientId: reservation.clientId,
-      amount: `$${parseFloat(invoiceAmount.replace(/[$,]/g, '')).toLocaleString()}`,
-      notes: invoiceNotes,
-      status: 'Pending Admin Approval',
-      createdDate: new Date().toISOString()
-    };
+    const matchesCategory =
+      categoryFilter === 'All'
+        ? true
+        : categoryFilter === 'Contracts'
+          ? (doc.type.toLowerCase().includes('contract') || doc.type.toLowerCase().includes('purchase'))
+          : categoryFilter === 'Inspections'
+            ? doc.type.toLowerCase().includes('inspection')
+            : categoryFilter === 'Customs'
+              ? (doc.type.toLowerCase().includes('customs') || doc.type.toLowerCase().includes('release'))
+              : true;
 
-    setInvoiceReqs(prev => [newRequest, ...prev]);
-    setInvoiceAmount('');
-    setInvoiceNotes('');
-    triggerToast(`Invoice request logged. Status: Pending Admin Approval.`);
-  };
-
-  const handleUploadMock = (e) => {
-    e.preventDefault();
-    if (!uploadClientId || !uploadFileName) return;
-
-    const newDoc = {
-      id: `adoc-${Math.floor(50 + Math.random() * 50)}`,
-      clientId: uploadClientId,
-      type: uploadDocType,
-      fileName: uploadFileName.split('\\').pop() || 'uploaded_document.pdf',
-      uploadDate: new Date().toISOString(),
-      status: 'Pending Review'
-    };
-
-    setDocsList(prev => [newDoc, ...prev]);
-    setUploadFileName('');
-    triggerToast(`File scan registered under buyer file.`);
-  };
+    return matchesSearch && matchesCategory;
+  });
 
   if (isLoading) {
-    return <TableSkeleton rows={4} cols={4} />;
+    return <TableSkeleton rows={5} cols={5} />;
   }
 
   return (
-    <div className="space-y-8 text-left relative">
+    <div className="space-y-8 text-left relative pb-16">
       
       {/* Toast Notification */}
       {toastMsg && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-charcoal text-white text-xs font-mono uppercase tracking-widest px-6 py-4 border border-brand-red/30 shadow-2xl">
-          {toastMsg}
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-[#0F172A] text-white text-xs font-mono uppercase tracking-widest px-6 py-4 border-l-4 border-brand-red shadow-2xl flex items-center gap-2">
+          <Check className="w-4 h-4 text-emerald-400" />
+          <span>{toastMsg}</span>
         </div>
       )}
 
       {/* Header */}
-      <div>
-        <span className="text-[9px] font-mono text-brand-red uppercase tracking-widest block mb-0.5">// Documents Ledger</span>
-        <h2 className="text-xl md:text-2xl font-display font-extrabold text-charcoal uppercase leading-none">
-          Documents & Invoices
-        </h2>
-        <p className="text-[11px] text-neutral-400 font-sans mt-1">
-          Review document verifications, upload paper logs, or dispatch escrow invoicing queries.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        
-        {/* Left pane: Tables log */}
-        <div className="lg:col-span-2 bg-white border border-border-hairline p-5 shadow-xs min-h-[400px]">
-          
-          {/* Tabs toggle */}
-          <div className="flex border-b border-neutral-100 mb-6 gap-6 select-none">
-            <button
-              onClick={() => setActiveTab('documents')}
-              className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 ${
-                activeTab === 'documents' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
-              }`}
-            >
-              Uploaded Scans ({docsList.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('invoices')}
-              className={`pb-3 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 ${
-                activeTab === 'invoices' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
-              }`}
-            >
-              Invoice Requests ({invoiceReqs.length})
-            </button>
-          </div>
-
-          {/* TAB: Documents */}
-          {activeTab === 'documents' && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-neutral-100 text-[9px] font-mono text-neutral-400 uppercase tracking-widest">
-                    <th className="pb-3 font-semibold">Client</th>
-                    <th className="pb-3 font-semibold">File Type</th>
-                    <th className="pb-3 font-semibold">File Name</th>
-                    <th className="pb-3 font-semibold text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {docsList.map((doc) => {
-                    const client = clientsList?.find(c => c.id === doc.clientId);
-                    return (
-                      <tr key={doc.id} className="border-b border-neutral-50 last:border-0 hover:bg-neutral-50/50 transition-colors">
-                        <td className="py-3 font-display font-bold uppercase text-[11px] text-charcoal">{client?.name}</td>
-                        <td className="py-3 text-neutral-400 font-mono uppercase text-[9px]">{doc.type}</td>
-                        <td className="py-3 text-neutral-600 font-mono break-all">{doc.fileName}</td>
-                        <td className="py-3 text-right">
-                          <span className={`text-[8px] font-mono uppercase tracking-wider px-2 py-0.5 border rounded-xs ${
-                            getDocStatusColor(doc.status)
-                          }`}>
-                            {doc.status}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* TAB: Invoice Requests */}
-          {activeTab === 'invoices' && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-neutral-100 text-[9px] font-mono text-neutral-400 uppercase tracking-widest">
-                    <th className="pb-3 font-semibold">Client</th>
-                    <th className="pb-3 font-semibold">Hold ID</th>
-                    <th className="pb-3 font-semibold">Invoiced Value</th>
-                    <th className="pb-3 font-semibold text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {invoiceReqs.map((req) => {
-                    const client = clientsList?.find(c => c.id === req.clientId);
-                    return (
-                      <tr key={req.id} className="border-b border-neutral-50 last:border-0 hover:bg-neutral-50/50 transition-colors">
-                        <td className="py-3 font-display font-bold uppercase text-[11px] text-charcoal">{client?.name}</td>
-                        <td className="py-3 text-neutral-400 font-mono uppercase text-[9px]">{req.reservationId}</td>
-                        <td className="py-3 text-brand-red font-display font-bold">{req.amount}</td>
-                        <td className="py-3 text-right">
-                          <span className={`text-[8px] font-mono uppercase tracking-wider px-2 py-0.5 border rounded-xs ${
-                            getInvoiceStatusColor(req.status)
-                          }`}>
-                            {req.status}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border-hairline pb-4">
+        <div>
+          <span className="text-[9px] font-mono text-brand-red uppercase tracking-widest block mb-0.5 font-bold">
+            // Deal Documents & Title Vault
+          </span>
+          <h2 className="text-xl md:text-2xl font-display font-extrabold text-charcoal uppercase leading-none">
+            Vehicle Documents & Records
+          </h2>
+          <p className="text-[11px] text-neutral-400 font-sans mt-1">
+            Access certified contracts, mechanical inspection certificates, and customs releases by vehicle and customer.
+          </p>
         </div>
 
-        {/* Right pane: Side action Forms */}
-        <div className="space-y-6">
-          
-          {/* Form: Upload Document */}
-          {activeTab === 'documents' && (
-            <div className="bg-white border border-border-hairline p-5 shadow-xs">
-              <span className="font-display font-bold text-xs uppercase tracking-wider text-charcoal mb-4 block">
-                Register Document Scan
-              </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-mono text-neutral-500 bg-white border border-neutral-200 px-3 py-1.5 rounded-xs">
+            {compiledDocs.length} Certified Records in Vault
+          </span>
+        </div>
+      </div>
 
-              <form onSubmit={handleUploadMock} className="space-y-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-[8px] font-mono uppercase tracking-wider text-neutral-400 font-semibold">Client Folder</label>
-                  <select
-                    required
-                    value={uploadClientId}
-                    onChange={(e) => setUploadClientId(e.target.value)}
-                    className="bg-white border border-border-hairline px-3 py-2 text-xs text-charcoal outline-hidden focus:border-brand-red cursor-pointer"
-                  >
-                    <option value="">-- Choose Client --</option>
-                    {clientsList?.map(c => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
+      {/* Filter Toolbar */}
+      <div className="bg-white border border-border-hairline p-4 shadow-xs flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 rounded-xs">
+        {/* Category Pills */}
+        <div className="flex gap-1.5 overflow-x-auto select-none">
+          {[
+            { id: 'All', label: 'All Documents', count: compiledDocs.length },
+            { id: 'Contracts', label: 'Contracts & Agreements', count: compiledDocs.filter(d => d.type.toLowerCase().includes('contract') || d.type.toLowerCase().includes('purchase')).length },
+            { id: 'Inspections', label: '150-Point Inspections', count: compiledDocs.filter(d => d.type.toLowerCase().includes('inspection')).length },
+            { id: 'Customs', label: 'Customs Releases', count: compiledDocs.filter(d => d.type.toLowerCase().includes('customs') || d.type.toLowerCase().includes('release')).length }
+          ].map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setCategoryFilter(cat.id)}
+              className={`px-3 py-1.5 text-xs font-display font-bold uppercase tracking-wider rounded-xs transition-all cursor-pointer flex items-center gap-2 shrink-0 ${
+                categoryFilter === cat.id
+                  ? 'bg-[#0F172A] text-white shadow-xs'
+                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+              }`}
+            >
+              <span>{cat.label}</span>
+              <span className={`text-[9px] font-mono px-1 py-0.2 rounded-2xs ${
+                categoryFilter === cat.id ? 'bg-white/20 text-white' : 'bg-neutral-200 text-neutral-600'
+              }`}>
+                {cat.count}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Search */}
+        <div className="relative w-full sm:w-72">
+          <input
+            type="text"
+            placeholder="Search by car, VIN, customer..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-light-bg border border-border-hairline rounded-xs pl-9 pr-4 py-1.5 text-xs outline-hidden focus:border-brand-red text-charcoal placeholder:text-neutral-400 font-sans"
+          />
+          <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        </div>
+      </div>
+
+      {/* Full-width Documents Table */}
+      <div className="bg-white border border-border-hairline shadow-xs overflow-hidden rounded-xs">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-neutral-50/80 border-b border-border-hairline text-[9px] font-mono text-neutral-400 uppercase tracking-wider select-none">
+                <th className="py-3 px-4 font-semibold">Document & Type</th>
+                <th className="py-3 px-4 font-semibold">Allocated Car / Vehicle</th>
+                <th className="py-3 px-4 font-semibold">Customer / Buyer</th>
+                <th className="py-3 px-4 font-semibold">File Specs</th>
+                <th className="py-3 px-4 font-semibold">Status</th>
+                <th className="py-3 px-4 font-semibold text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border-hairline">
+              {filteredDocs.map((doc) => (
+                <tr
+                  key={doc.id}
+                  onClick={() => setPreviewDoc(doc)}
+                  className="hover:bg-neutral-50/60 transition-colors group cursor-pointer"
+                >
+                  {/* Column 1: Document & Type */}
+                  <td className="py-3.5 px-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xs bg-brand-red/10 text-brand-red flex items-center justify-center shrink-0 border border-brand-red/20">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div className="leading-tight">
+                        <span className="font-display font-bold uppercase text-xs text-charcoal block group-hover:text-brand-red transition-colors">
+                          {doc.name}
+                        </span>
+                        <span className="text-[9px] font-mono text-neutral-400 block mt-0.5">
+                          {doc.type} • Doc Ref: {doc.id}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Column 2: Vehicle */}
+                  <td className="py-3.5 px-4">
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={doc.vehicleImage}
+                        alt={doc.vehicleModel}
+                        className="w-11 h-8 object-cover rounded-xs border border-neutral-200 shrink-0"
+                      />
+                      <div className="leading-tight">
+                        <span className="font-display font-bold uppercase text-[11px] text-charcoal block">
+                          {doc.vehicleModel} ({doc.vehicleYear})
+                        </span>
+                        <span className="text-[9px] font-mono text-neutral-400 block mt-0.5">
+                          VIN: {doc.vehicleVin}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Column 3: Customer */}
+                  <td className="py-3.5 px-4">
+                    <div className="leading-tight">
+                      <span className="font-display font-bold uppercase text-[11px] text-charcoal block">
+                        {doc.customerName}
+                      </span>
+                      <span className="text-[9px] font-mono text-neutral-400 block mt-0.5">
+                        {doc.customerEmail}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Column 4: File Specs */}
+                  <td className="py-3.5 px-4 font-mono text-[10px] text-neutral-500">
+                    <div>{doc.fileSize}</div>
+                    <div className="text-[9px] text-neutral-400 mt-0.5">
+                      {new Date(doc.issueDate || Date.now()).toLocaleDateString()}
+                    </div>
+                  </td>
+
+                  {/* Column 5: Status */}
+                  <td className="py-3.5 px-4">
+                    <span className="text-[8px] font-mono uppercase px-2 py-0.5 rounded-2xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      {doc.status}
+                    </span>
+                  </td>
+
+                  {/* Column 6: Actions */}
+                  <td className="py-3.5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => setPreviewDoc(doc)}
+                        className="px-2.5 py-1 bg-neutral-100 hover:bg-[#0F172A] hover:text-white text-charcoal text-[9px] font-mono font-bold uppercase rounded-xs transition-colors cursor-pointer"
+                      >
+                        Preview
+                      </button>
+                      <button
+                        onClick={() => triggerToast(`Downloading PDF for ${doc.name}...`)}
+                        className="p-1.5 border border-neutral-200 hover:bg-neutral-100 text-neutral-500 hover:text-charcoal rounded-xs cursor-pointer transition-colors"
+                        title="Download PDF"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ============================================================ */}
+      {/* SIMPLIFIED & SCROLLABLE DOCUMENT PREVIEW MODAL               */}
+      {/* ============================================================ */}
+      {previewDoc && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+          onClick={() => setPreviewDoc(null)}
+        >
+          <div
+            className="bg-white w-full max-w-2xl border border-neutral-200 shadow-2xl rounded-xs overflow-hidden flex flex-col max-h-[85vh] my-auto text-left relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="bg-[#0F172A] text-white p-4 sm:p-5 flex justify-between items-center shrink-0 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xs bg-brand-red/10 border border-brand-red/30 flex items-center justify-center text-brand-red shrink-0">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[9px] font-mono text-brand-red uppercase tracking-widest font-bold block">
+                    Certified Record Preview
+                  </span>
+                  <h3 className="text-base sm:text-lg font-display font-extrabold uppercase text-white leading-tight">
+                    {previewDoc.name}
+                  </h3>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setPreviewDoc(null)}
+                className="p-1.5 bg-slate-800 hover:bg-brand-red text-slate-300 hover:text-white rounded-xs transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Scrollable Body */}
+            <div className="p-5 overflow-y-auto flex-1 min-h-0 space-y-5 text-xs font-sans">
+              {/* Document Certificate Sheet */}
+              <div className="flex justify-between items-start border-b-2 border-charcoal pb-4">
+                <div>
+                  <h4 className="font-display font-extrabold text-sm uppercase text-charcoal tracking-wide">
+                    KISACO AUTO SALES LTD
+                  </h4>
+                  <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mt-0.5">
+                    Official Vehicle Registry & Title Escrow Custody
+                  </p>
+                  <p className="text-[9px] text-neutral-400 font-mono mt-0.5">
+                    60 Montgomery Avenue, Richmond Park • Tax ID: JM-9482-A
+                  </p>
+                </div>
+                <div className="text-right font-mono text-[10px]">
+                  <span className="text-brand-red font-bold uppercase block">{previewDoc.type}</span>
+                  <span className="text-neutral-500 block">Doc ID: {previewDoc.id}</span>
+                  <span className="text-neutral-400 block">{new Date(previewDoc.issueDate || Date.now()).toLocaleDateString()}</span>
+                </div>
+              </div>
+
+              {/* Linked Car & Customer Details Box */}
+              <div className="bg-neutral-50 border border-neutral-200 p-4 rounded-xs grid grid-cols-2 gap-4">
+                <div>
+                  <span className="text-[8px] font-mono text-neutral-400 uppercase tracking-widest block font-bold">
+                    Vehicle Assigned
+                  </span>
+                  <h5 className="font-display font-bold uppercase text-charcoal text-xs mt-1">
+                    {previewDoc.vehicleModel} ({previewDoc.vehicleYear})
+                  </h5>
+                  <p className="font-mono text-[10px] text-neutral-500 mt-0.5">VIN: {previewDoc.vehicleVin}</p>
+                </div>
+                <div>
+                  <span className="text-[8px] font-mono text-neutral-400 uppercase tracking-widest block font-bold">
+                    Registered Client / Buyer
+                  </span>
+                  <h5 className="font-display font-bold uppercase text-charcoal text-xs mt-1">
+                    {previewDoc.customerName}
+                  </h5>
+                  <p className="font-mono text-[10px] text-neutral-500 mt-0.5">{docEmailOrPhone(previewDoc)}</p>
+                </div>
+              </div>
+
+              {/* Certified Metadata */}
+              <div className="space-y-2">
+                <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-charcoal block">
+                  Document Metadata & Options
+                </span>
+                {previewDoc.options ? (
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono bg-white p-3 rounded-xs border border-neutral-200">
+                    {Object.entries(previewDoc.options).map(([k, v]) => (
+                      <div key={k} className="flex justify-between">
+                        <span className="text-neutral-400 capitalize">{k.replace(/([A-Z])/g, ' $1')}:</span>
+                        <strong className="text-charcoal">{String(v)}</strong>
+                      </div>
                     ))}
-                  </select>
+                  </div>
+                ) : (
+                  <p className="text-[11px] text-neutral-500 font-sans italic bg-white p-3 border border-neutral-200 rounded-xs">
+                    Standard certified document verified by authorized brokerage agents and counter-signed in escrow.
+                  </p>
+                )}
+              </div>
+
+              {/* Official Cryptographic Stamp */}
+              <div className="border border-dashed border-neutral-300 p-4 rounded-xs bg-white flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div className="space-y-1 text-left">
+                  <div className="flex items-center gap-1.5 text-emerald-700 font-display font-bold text-xs uppercase">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <span>Cryptographic Audit Proof: {previewDoc.status}</span>
+                  </div>
+                  <span className="font-mono text-[9px] text-neutral-400 block break-all">
+                    {previewDoc.hash || 'SHA256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069'}
+                  </span>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-[8px] font-mono uppercase tracking-wider text-neutral-400 font-semibold">Document Node Type</label>
-                  <select
-                    value={uploadDocType}
-                    onChange={(e) => setUploadDocType(e.target.value)}
-                    className="bg-white border border-border-hairline px-3 py-2 text-xs text-charcoal outline-hidden focus:border-brand-red cursor-pointer"
-                  >
-                    <option value="ID Verification">ID Verification</option>
-                    <option value="Payment Proof">Payment Proof</option>
-                    <option value="Other">Other</option>
-                  </select>
+                <div className="border-2 border-emerald-600 text-emerald-700 px-3 py-1 text-center font-display font-extrabold uppercase text-[10px] tracking-widest shrink-0 rotate-[-2deg]">
+                  OFFICIALLY SEALED
                 </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-[8px] font-mono uppercase tracking-wider text-neutral-400 font-semibold">Select File</label>
-                  <input
-                    type="file"
-                    required
-                    onChange={(e) => setUploadFileName(e.target.value)}
-                    className="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-[10px] file:font-mono file:uppercase file:tracking-widest file:font-bold file:bg-charcoal file:text-white hover:file:bg-neutral-800 cursor-pointer"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-charcoal hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-widest py-3 flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
-                >
-                  <Upload className="w-4 h-4" />
-                  <span>Register Scan</span>
-                </button>
-              </form>
+              </div>
             </div>
-          )}
 
-          {/* Form: Request Invoice */}
-          {activeTab === 'invoices' && (
-            <div className="bg-white border border-border-hairline p-5 shadow-xs">
-              <span className="font-display font-bold text-xs uppercase tracking-wider text-charcoal mb-4 block">
-                Generate Invoicing Query
+            {/* Footer */}
+            <div className="bg-neutral-50 border-t border-neutral-200 p-3 sm:p-4 flex justify-between items-center shrink-0">
+              <span className="text-[10px] font-mono text-neutral-500">
+                File Size: <strong className="text-charcoal">{previewDoc.fileSize}</strong>
               </span>
-
-              <form onSubmit={handleRequestInvoice} className="space-y-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-[8px] font-mono uppercase tracking-wider text-neutral-400 font-semibold">Active Hold Lock</label>
-                  <select
-                    required
-                    value={invoiceResId}
-                    onChange={(e) => setInvoiceResId(e.target.value)}
-                    className="bg-white border border-border-hairline px-3 py-2 text-xs text-charcoal outline-hidden focus:border-brand-red cursor-pointer"
-                  >
-                    <option value="">-- Choose Hold Reference --</option>
-                    {initialRes?.filter(r => r.status === 'Pending' || r.status === 'Confirmed').map(r => {
-                      const client = clientsList?.find(c => c.id === r.clientId);
-                      return (
-                        <option key={r.id} value={r.id}>{r.id} ({client?.name})</option>
-                      );
-                    })}
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-[8px] font-mono uppercase tracking-wider text-neutral-400 font-semibold">Invoice Amount ($)</label>
-                  <input
-                    type="number"
-                    required
-                    placeholder="e.g. 68000"
-                    value={invoiceAmount}
-                    onChange={(e) => setInvoiceAmount(e.target.value)}
-                    className="bg-white border border-border-hairline px-3.5 py-2.5 text-xs text-charcoal outline-hidden focus:border-brand-red transition-all"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-[8px] font-mono uppercase tracking-wider text-neutral-400 font-semibold">Transaction Notes</label>
-                  <textarea
-                    rows={3}
-                    value={invoiceNotes}
-                    onChange={(e) => setInvoiceNotes(e.target.value)}
-                    placeholder="Escrow parameters, wire codes..."
-                    className="bg-white border border-border-hairline p-3 text-xs text-charcoal outline-hidden focus:border-brand-red transition-all resize-none placeholder:text-neutral-400"
-                  />
-                </div>
-
+              <div className="flex items-center gap-2">
                 <button
-                  type="submit"
-                  className="w-full bg-brand-red hover:bg-brand-red-hover text-white text-xs font-bold uppercase tracking-widest py-3 flex items-center justify-center gap-1.5 cursor-pointer transition-colors shadow-sm"
+                  onClick={() => triggerToast(`Print command sent for ${previewDoc.name}.`)}
+                  className="px-3 py-1.5 bg-white border border-neutral-300 hover:bg-neutral-100 text-charcoal text-xs font-mono font-bold uppercase rounded-xs transition-colors cursor-pointer"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Request Invoicing</span>
+                  Print
                 </button>
-              </form>
+                <button
+                  onClick={() => {
+                    triggerToast(`Downloaded ${previewDoc.name}.`);
+                    setPreviewDoc(null);
+                  }}
+                  className="px-4 py-1.5 bg-brand-red hover:bg-red-700 text-white text-xs font-mono font-bold uppercase rounded-xs transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download PDF</span>
+                </button>
+              </div>
             </div>
-          )}
-
+          </div>
         </div>
-
-      </div>
+      )}
 
     </div>
   );
+}
+
+function docEmailOrPhone(doc) {
+  if (doc.customerEmail && doc.customerPhone) {
+    return `${doc.customerEmail} • ${doc.customerPhone}`;
+  }
+  return doc.customerEmail || doc.customerPhone || 'Contact on file';
 }

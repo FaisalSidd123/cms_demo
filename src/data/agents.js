@@ -1,7 +1,7 @@
 export const mockCurrentAgent = {
   id: 'agent-101',
   name: 'Sarah Connor',
-  email: 'sarah.connor@carmindauto.com',
+  email: 'sarah.connor@kisacoauto.com',
   phone: '1 876-869-7057 ext. 294',
   avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&q=80',
   totalSalesThisMonth: '$384,500',
@@ -21,7 +21,7 @@ export const agentsRoster = [
   {
     id: 'agent-101',
     name: 'Sarah Connor',
-    email: 'sarah.connor@carmindauto.com',
+    email: 'sarah.connor@kisacoauto.com',
     phone: '1 876-869-7057 ext. 294',
     dealsClosedCount: 4,
     salesValue: '$384,500',
@@ -31,7 +31,7 @@ export const agentsRoster = [
   {
     id: 'agent-102',
     name: 'John Connor',
-    email: 'john.connor@carmindauto.com',
+    email: 'john.connor@kisacoauto.com',
     phone: '1 876-869-7057 ext. 202',
     dealsClosedCount: 2,
     salesValue: '$184,000',
@@ -41,7 +41,7 @@ export const agentsRoster = [
   {
     id: 'agent-103',
     name: 'Ellen Ripley',
-    email: 'ellen.ripley@carmindauto.com',
+    email: 'ellen.ripley@kisacoauto.com',
     phone: '1 876-869-7057 ext. 422',
     dealsClosedCount: 5,
     salesValue: '$492,000',
@@ -51,7 +51,7 @@ export const agentsRoster = [
   {
     id: 'agent-104',
     name: 'Kyle Reese',
-    email: 'kyle.reese@carmindauto.com',
+    email: 'kyle.reese@kisacoauto.com',
     phone: '1 876-869-7057 ext. 101',
     dealsClosedCount: 1,
     salesValue: '$89,000',

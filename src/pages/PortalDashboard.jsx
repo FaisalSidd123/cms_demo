@@ -187,8 +187,8 @@ export default function PortalDashboard() {
               <span className="font-display font-bold text-sm uppercase tracking-wider text-charcoal">
                 Active Operations Tracking
               </span>
-              <Link to="/portal/orders" className="text-neutral-400 hover:text-brand-red text-xs flex items-center gap-1 transition-colors">
-                <span>All Orders</span>
+              <Link to="/portal/purchases" className="text-neutral-400 hover:text-brand-red text-xs flex items-center gap-1 transition-colors">
+                <span>All Purchases & Orders</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -222,7 +222,7 @@ export default function PortalDashboard() {
                           </div>
                         </div>
                         <Link 
-                          to={`/portal/orders/${order.id}`}
+                          to="/portal/purchases"
                           className="text-xs text-brand-red hover:underline font-semibold flex items-center gap-0.5"
                         >
                           <span>Track details</span>
@@ -299,7 +299,7 @@ export default function PortalDashboard() {
                       <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-wider">{recentVehicle.year} · {recentVehicle.color}</span>
                       <span className="text-lg font-display font-black text-brand-red block mt-0.5">{recentVehicle.price}</span>
                     </div>
-                    <Link to="/portal/orders" className="text-[9px] font-mono text-brand-red uppercase tracking-widest font-bold hover:underline flex items-center gap-0.5">
+                    <Link to="/portal/purchases" className="text-[9px] font-mono text-brand-red uppercase tracking-widest font-bold hover:underline flex items-center gap-0.5">
                       Track <ChevronRight className="w-3 h-3" />
                     </Link>
                   </div>
@@ -511,11 +511,11 @@ export default function PortalDashboard() {
           </Link>
 
           <Link
-            to="/portal/orders"
+            to="/portal/purchases"
             className="quick-action-btn font-mono justify-center flex-col gap-2 py-5"
           >
             <Package className="w-5 h-5 text-brand-red" />
-            <span>Track Orders</span>
+            <span>Vehicle History & Status</span>
           </Link>
 
           <Link

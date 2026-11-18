@@ -45,7 +45,7 @@ export const adminAuditLog = [
     adminId: 'adm-01',
     adminName: 'Chief Executive Operator',
     actionTaken: 'Role Deactivated',
-    target: 'Deactivated manager account: robert.vance@carmindauto.com.',
+    target: 'Deactivated manager account: robert.vance@kisacoauto.com.',
     timestamp: getDaysAgo(5)
   }
 ];

@@ -263,7 +263,7 @@ export default function VehicleDetails({ vehicles = [], onReserve, savedVehicleI
               </button>
             ) : (
               <a
-                href="mailto:advisors@carmindauto.com"
+                href="mailto:advisors@kisacoauto.com"
                 className="flex-1 bg-charcoal text-white text-xs font-bold uppercase tracking-widest py-4.5 flex items-center justify-center gap-2 cursor-pointer hover:bg-neutral-800 transition-colors"
               >
                 <span>Contact Advisor</span>

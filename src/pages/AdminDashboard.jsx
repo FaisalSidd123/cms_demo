@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMockData } from '../hooks/useMockData';
 import { DashboardSkeleton } from '../components/Skeletons';
 import {
@@ -14,10 +15,16 @@ import {
   Activity,
   Wifi,
   Shield,
-  Zap
+  Zap,
+  Lock,
+  AlertTriangle,
+  FileCheck,
+  ChevronRight,
+  ArrowRight
 } from 'lucide-react';
 
 export default function AdminDashboard() {
+  const [timeRange, setTimeRange] = useState('30D');
   const { data: vehiclesList, isLoading: vehiclesLoading } = useMockData('vehicles');
   const { data: clientsList, isLoading: clientsLoading } = useMockData('clients');
   const { data: reservationsList, isLoading: resLoading } = useMockData('reservations');
@@ -34,10 +41,10 @@ export default function AdminDashboard() {
 
   // Agent leaderboard roster
   const roster = [
-    { name: 'Ellen Ripley', email: 'ellen.ripley@ckautocentre.com', closed: 5, revenue: '$492,000', revenueNum: 492000, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&q=80' },
-    { name: 'Sarah Connor', email: 'sarah.connor@ckautocentre.com', closed: 4, revenue: '$384,500', revenueNum: 384500, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&q=80' },
-    { name: 'John Connor', email: 'john.connor@ckautocentre.com', closed: 2, revenue: '$184,000', revenueNum: 184000, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80' },
-    { name: 'Kyle Reese', email: 'kyle.reese@ckautocentre.com', closed: 1, revenue: '$89,000', revenueNum: 89000, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&q=80' }
+    { name: 'Ellen Ripley', email: 'ellen.ripley@kisacoauto.com', closed: 5, revenue: '$492,000', revenueNum: 492000, avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&q=80' },
+    { name: 'Sarah Connor', email: 'sarah.connor@kisacoauto.com', closed: 4, revenue: '$384,500', revenueNum: 384500, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&q=80' },
+    { name: 'John Connor', email: 'john.connor@kisacoauto.com', closed: 2, revenue: '$184,000', revenueNum: 184000, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80' },
+    { name: 'Kyle Reese', email: 'kyle.reese@kisacoauto.com', closed: 1, revenue: '$89,000', revenueNum: 89000, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&q=80' }
   ];
 
   const maxRevenue = Math.max(...roster.map(a => a.revenueNum));
@@ -49,6 +56,13 @@ export default function AdminDashboard() {
   const reserved = vehiclesList?.filter(v => v.status === 'reserved').length || 0;
   const sold = vehiclesList?.filter(v => v.status === 'sold').length || 0;
   const totalVehicles = vehiclesList?.length || 1;
+
+  // Escrow & Transaction calculations
+  const txSource = transactionsList || [];
+  const inEscrowVault = txSource
+    .filter(t => t.paymentStatus === 'Partially Paid' || t.escrowStatus?.includes('Escrow'))
+    .reduce((acc, t) => acc + (parseInt(t.amountPaid?.replace(/[^0-9]/g, '')) || 0), 0);
+  const overdueCount = txSource.filter(t => t.paymentStatus === 'Overdue').length;
 
   // Revenue by body type (mock)
   const revenueByType = [
@@ -89,23 +103,66 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8 text-left">
 
-      {/* Welcome header */}
-      <div className="flex justify-between items-start animate-fade-slide-up">
+      {/* Welcome header with time filter */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 animate-fade-slide-up border-b border-border-hairline pb-4">
         <div>
           <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest block mb-0.5">// Operations Center</span>
           <h2 className="text-2xl md:text-3xl font-display font-extrabold text-charcoal uppercase leading-none">
-            Admin Workspace          </h2>
+            Admin Workspace
+          </h2>
           <p className="text-xs text-neutral-500 font-sans mt-1.5">
-            Real-time platform metrics, agent performance, and administrative audit trails.
+            Real-time platform metrics, escrow settlement vault, and platform audit trails.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 border border-emerald-200">
-          <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-          <span className="text-[10px] font-mono text-emerald-700 uppercase tracking-widest font-bold">System Live</span>
+
+        <div className="flex items-center gap-3">
+          {/* Time range filter */}
+          <div className="flex bg-neutral-100 p-0.5 rounded-xs border border-neutral-200 text-[10px] font-mono">
+            {['Today', '7D', '30D', 'YTD'].map(r => (
+              <button
+                key={r}
+                onClick={() => setTimeRange(r)}
+                className={`px-2.5 py-1 rounded-2xs font-bold uppercase transition-all cursor-pointer ${
+                  timeRange === r ? 'bg-charcoal text-white shadow-2xs' : 'text-neutral-500 hover:text-charcoal'
+                }`}
+              >
+                {r}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 border border-emerald-200">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+            <span className="text-[10px] font-mono text-emerald-700 uppercase tracking-widest font-bold">System Live</span>
+          </div>
         </div>
       </div>
 
-      {/* KPI Cards Grid — staggered entrance */}
+      {/* High-Priority Escalations / Action Banner if any overdue transactions */}
+      {overdueCount > 0 && (
+        <div className="bg-red-50/80 border-l-4 border-brand-red p-4 rounded-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-brand-red shrink-0" />
+            <div>
+              <span className="font-display font-bold uppercase text-xs text-charcoal block">
+                Escrow Settlement Attention Required
+              </span>
+              <span className="text-[11px] text-neutral-600 font-sans">
+                {overdueCount} vehicle transaction is past its settlement deadline (Toyota Land Cruiser #txn-7003 • $90,200).
+              </span>
+            </div>
+          </div>
+          <Link
+            to="/admin/transactions"
+            className="flex items-center gap-1.5 bg-brand-red hover:bg-red-700 text-white px-3.5 py-1.5 text-xs font-mono font-bold uppercase tracking-wider transition-colors rounded-xs shrink-0"
+          >
+            <span>Resolve in Escrow</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      )}
+
+      {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 stagger-children">
 
         {/* KPI: Total Inventory */}
@@ -148,6 +205,18 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* KPI: Escrow Vault Active */}
+        <div className="dash-card dash-card--purple p-4 flex flex-col justify-between h-24 animate-fade-slide-up">
+          <div className="flex justify-between items-start">
+            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block font-semibold">In Escrow Vault</span>
+            <Lock className="w-4 h-4 text-purple-400" />
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-display font-black text-charcoal">${Math.round(inEscrowVault / 1000)}k</span>
+            <span className="text-[9px] font-mono text-purple-600 font-bold">Custody</span>
+          </div>
+        </div>
+
         {/* KPI: Customers */}
         <div className="dash-card dash-card--green p-4 flex flex-col justify-between h-24 animate-fade-slide-up">
           <div className="flex justify-between items-start">
@@ -159,18 +228,6 @@ export default function AdminDashboard() {
             <span className="text-[9px] font-mono text-emerald-500 font-bold flex items-center gap-0.5">
               <ArrowUpRight className="w-3 h-3" />+4
             </span>
-          </div>
-        </div>
-
-        {/* KPI: Sales Agents */}
-        <div className="dash-card dash-card--purple p-4 flex flex-col justify-between h-24 animate-fade-slide-up">
-          <div className="flex justify-between items-start">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block font-semibold">Sales Agents</span>
-            <Briefcase className="w-4 h-4 text-purple-400" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-display font-black text-charcoal">{roster.length}</span>
-            <span className="text-[9px] font-mono text-neutral-500 font-bold">Active</span>
           </div>
         </div>
 

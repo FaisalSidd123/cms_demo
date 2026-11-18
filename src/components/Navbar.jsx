@@ -43,9 +43,16 @@ export default function Navbar() {
           
           {/* Dealership Logo */}
           <div className="flex items-center">
-            <a href="#" className="flex items-center gap-1.5 font-display font-extrabold tracking-widest text-lg md:text-xl uppercase">
-              <span className={isScrolled ? 'text-charcoal' : 'text-white'}>C&K</span>
-              <span className="text-brand-red">Auto Centre</span>
+            <a href="#" className="flex items-center gap-3 font-display font-extrabold tracking-widest text-lg md:text-xl uppercase">
+              <img 
+                src="/logo.jpg" 
+                alt="Kisaco Auto Sales Ltd" 
+                className="w-10 h-10 rounded-full object-cover border border-white/20 shadow-xs" 
+              />
+              <div className="flex items-center gap-1.5">
+                <span className={isScrolled ? 'text-charcoal' : 'text-white'}>Kisaco</span>
+                <span className="text-brand-red">Auto Sales</span>
+              </div>
             </a>
           </div>
 
@@ -138,9 +145,14 @@ export default function Navbar() {
             >
               <div>
                 <div className="flex justify-between items-center mb-10">
-                  <span className="font-display font-extrabold tracking-widest text-lg text-charcoal uppercase">
-                    C&K <span className="text-brand-red">Auto Centre</span>
-                  </span>
+                  <div className="flex items-center gap-2.5 font-display font-extrabold tracking-widest text-base text-charcoal uppercase">
+                    <img 
+                      src="/logo.jpg" 
+                      alt="Kisaco Auto Sales Ltd" 
+                      className="w-9 h-9 rounded-full object-cover border border-neutral-200" 
+                    />
+                    <span>Kisaco <span className="text-brand-red">Auto Sales</span></span>
+                  </div>
                   <button 
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="text-charcoal hover:text-brand-red"
@@ -173,7 +185,7 @@ export default function Navbar() {
                 </a>
                 <div className="flex items-center gap-2 justify-center text-xs text-neutral-500 font-medium">
                   <Phone className="w-4 h-4 text-brand-red" />
-                  <span>1 876-364-0470</span>
+                  <span>1 876-556-2513</span>
                 </div>
               </div>
             </motion.div>

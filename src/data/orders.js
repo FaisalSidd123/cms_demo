@@ -23,7 +23,7 @@ export const orders = [
     ],
     agent: {
       name: 'Sarah Connor',
-      contact: 'sarah.connor@carmindauto.com'
+      contact: 'sarah.connor@kisacoauto.com'
     }
   },
   {
@@ -40,7 +40,7 @@ export const orders = [
     ],
     agent: {
       name: 'Thomas Miller',
-      contact: 'thomas.miller@carmindauto.com'
+      contact: 'thomas.miller@kisacoauto.com'
     }
   }
 ];

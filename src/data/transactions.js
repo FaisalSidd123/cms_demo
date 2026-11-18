@@ -1,46 +1,769 @@
 export const transactions = [
   {
     id: 'txn-7001',
-    orderId: 'ord-3029', // Mercedes GLE
-    customerId: 'cust-9428', // Alexander Sterling
-    agentId: 'agent-101', // Sarah Connor
+    orderId: 'ord-3029',
+    customerId: 'cust-9428',
+    customerName: 'Alexander Sterling',
+    customerEmail: 'alexander.sterling@kisacoauto.com',
+    customerPhone: '+1 (305) 555-0144',
+    customerTier: 'VIP Tier 1',
+    agentId: 'agent-101',
+    agentName: 'Sarah Connor',
+    agentCommission: '$2,245.50',
     vehicleId: 2,
-    amount: '$68,000',
+    vehicleModel: 'Mercedes-Benz GLE',
+    vehicleYear: 2023,
+    vehicleVin: 'WDC1671591A928371',
+    vehicleColor: 'Obsidian Black',
+    vehicleMileage: '9,500 mi',
+    vehicleImage: 'https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800&q=80',
+    location: 'Los Angeles Depot, Bay 14',
+    basePrice: '$68,000',
+    totalAmount: '$74,850',
+    amountPaid: '$74,850',
+    balanceDue: '$0',
     paymentStatus: 'Paid', // Paid / Partially Paid / Pending / Overdue
+    escrowStatus: 'Released & Settled',
+    paymentMethod: 'SWIFT Bank Wire',
     paymentDate: '2026-06-27T11:40:00Z',
-    dueDate: '2026-06-27T11:40:00Z'
+    dueDate: '2026-06-27T11:40:00Z',
+    clearedDate: '2026-06-27T14:15:00Z',
+    notes: 'Escrow fully settled. Port customs release executed and title deed transferred to buyer.',
+    paymentBreakdown: {
+      vehicleBase: '$68,000',
+      escrowHoldDeposit: '$5,000',
+      customsImportDuty: '$4,200',
+      documentationRegistration: '$1,450',
+      freightLogistics: '$1,200'
+    },
+    milestones: [
+      {
+        id: 'ms-7001-1',
+        title: 'Initial Escrow Hold Deposit',
+        amount: '$5,000',
+        dueDate: '2026-06-25T14:32:00Z',
+        paidDate: '2026-06-25T14:35:00Z',
+        status: 'Cleared',
+        method: 'Credit Card / Vault',
+        ref: 'AUTH-CC-89421',
+        bankTrace: 'STRP-TR-99420-US'
+      },
+      {
+        id: 'ms-7001-2',
+        title: 'Customs & Port Handling Surcharge',
+        amount: '$5,400',
+        dueDate: '2026-06-26T10:00:00Z',
+        paidDate: '2026-06-26T11:20:00Z',
+        status: 'Cleared',
+        method: 'SWIFT Bank Wire',
+        ref: 'WIRE-US-492109',
+        bankTrace: 'CHASUS33-MT103-8821'
+      },
+      {
+        id: 'ms-7001-3',
+        title: 'Final Vehicle Settlement & Title Balance',
+        amount: '$64,450',
+        dueDate: '2026-06-27T11:40:00Z',
+        paidDate: '2026-06-27T11:40:00Z',
+        status: 'Cleared',
+        method: 'SWIFT Bank Wire',
+        ref: 'WIRE-US-501844',
+        bankTrace: 'CHASUS33-MT103-9104'
+      }
+    ],
+    documents: [
+      {
+        id: 'doc-tx-101',
+        name: 'Pro-Forma Sale Agreement & VIN Lock',
+        type: 'Purchase Contract',
+        fileSize: '320 KB',
+        issueDate: '2026-06-25T15:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069',
+        options: { hasWarranty: true, isFinanced: false, deliveryType: 'Enclosed Carrier' }
+      },
+      {
+        id: 'doc-tx-102',
+        name: '150-Point Pre-Delivery Inspection Certificate',
+        type: 'Mechanical Inspection',
+        fileSize: '2.4 MB',
+        issueDate: '2026-06-25T16:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a',
+        options: { brakePads: '92%', tireTread: '8.5mm', obdScan: 'Zero Faults' }
+      },
+      {
+        id: 'doc-tx-103',
+        name: 'Customs Duty Clearance Certificate (Form C-78)',
+        type: 'Customs & Port Release',
+        fileSize: '512 KB',
+        issueDate: '2026-06-26T14:30:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d',
+        options: { hsCode: '8703.23.00', portOfEntry: 'Kingston Container Terminal' }
+      },
+      {
+        id: 'doc-tx-104',
+        name: 'SWIFT MT103 Official Wire Transfer Receipt',
+        type: 'Payment Proof',
+        fileSize: '185 KB',
+        issueDate: '2026-06-27T11:45:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:1a8565a9dae4b4b766ae7f56f6343354532307b113638ffec7fc76938a0dd7fb',
+        options: { intermediaryBank: 'JPMorgan Chase NYC', currency: 'USD' }
+      },
+      {
+        id: 'doc-tx-105',
+        name: 'Certificate of Ownership & Title Deed',
+        type: 'Title Registration',
+        fileSize: '410 KB',
+        issueDate: '2026-06-28T09:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:88d4266fd4e6338d13b845fcf289579d209c897823b9217da3e161936f031589',
+        options: { lienFree: true, titleState: 'Clean Title Transfer' }
+      }
+    ]
   },
   {
     id: 'txn-7002',
-    orderId: 'ord-4190', // Range Rover Sport
-    customerId: 'cust-004', // Diana Prince
+    orderId: 'ord-4190',
+    customerId: 'cust-004',
+    customerName: 'Diana Prince',
+    customerEmail: 'diana.prince@themysis.org',
+    customerPhone: '+1 (202) 555-0177',
+    customerTier: 'Preferred Diplomatic',
     agentId: 'agent-101',
+    agentName: 'Sarah Connor',
+    agentCommission: '$3,102.00',
     vehicleId: 7,
-    amount: '$94,000',
-    paymentStatus: 'Pending',
-    paymentDate: null,
-    dueDate: '2026-07-05T12:00:00Z'
+    vehicleModel: 'Range Rover Sport',
+    vehicleYear: 2023,
+    vehicleVin: 'SALWR2V48PA892110',
+    vehicleColor: 'Santorini Black',
+    vehicleMileage: '11,200 mi',
+    vehicleImage: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=800&q=80',
+    location: 'Kingston Bonded Warehouse, Bay 08',
+    basePrice: '$94,000',
+    totalAmount: '$103,400',
+    amountPaid: '$30,000',
+    balanceDue: '$73,400',
+    paymentStatus: 'Partially Paid',
+    escrowStatus: 'Active in Escrow Vault',
+    paymentMethod: 'Escrow Trust Deposit',
+    paymentDate: '2026-07-02T10:15:00Z',
+    dueDate: '2026-07-08T17:00:00Z',
+    clearedDate: null,
+    notes: 'Initial $30k deposit cleared into escrow vault. Balance wire scheduled upon mechanical signoff.',
+    paymentBreakdown: {
+      vehicleBase: '$94,000',
+      escrowHoldDeposit: '$15,000',
+      customsImportDuty: '$5,900',
+      documentationRegistration: '$1,800',
+      freightLogistics: '$1,700'
+    },
+    milestones: [
+      {
+        id: 'ms-7002-1',
+        title: 'Priority Escrow Hold Deposit',
+        amount: '$15,000',
+        dueDate: '2026-07-01T10:05:00Z',
+        paidDate: '2026-07-01T10:12:00Z',
+        status: 'Cleared',
+        method: 'Escrow Trust Vault',
+        ref: 'ESC-HOLD-9011',
+        bankTrace: 'ESCRW-VAULT-2026-07'
+      },
+      {
+        id: 'ms-7002-2',
+        title: 'Freight & Port Wharfage Advance',
+        amount: '$15,000',
+        dueDate: '2026-07-02T10:15:00Z',
+        paidDate: '2026-07-02T10:30:00Z',
+        status: 'Cleared',
+        method: 'SWIFT Bank Wire',
+        ref: 'WIRE-NY-33910',
+        bankTrace: 'CITIUS33-MT103-7721'
+      },
+      {
+        id: 'ms-7002-3',
+        title: 'Final Vehicle Balance & Export Tax',
+        amount: '$73,400',
+        dueDate: '2026-07-08T17:00:00Z',
+        paidDate: null,
+        status: 'Pending',
+        method: 'SWIFT Bank Wire',
+        ref: 'INVOICED-BALANCE',
+        bankTrace: 'AWAITING-WIRE'
+      }
+    ],
+    documents: [
+      {
+        id: 'doc-tx-201',
+        name: 'Conditional Escrow Purchase Contract',
+        type: 'Purchase Contract',
+        fileSize: '345 KB',
+        issueDate: '2026-07-01T10:30:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:3b94a88c221192e482390fcae129381023910283019283019283019283019283',
+        options: { hasWarranty: true, isFinanced: false, deliveryType: 'VIP Flatbed Delivery' }
+      },
+      {
+        id: 'doc-tx-202',
+        name: 'Comprehensive 150-Point Technical Inspection',
+        type: 'Mechanical Inspection',
+        fileSize: '3.1 MB',
+        issueDate: '2026-07-01T14:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:772910aafe981290310239102830192830192830192830192830192830192830',
+        options: { airSuspension: 'Calibrated', panoramicRoof: 'Inspected', tires: 'New Pirelli 21"' }
+      },
+      {
+        id: 'doc-tx-203',
+        name: 'Escrow Vault Trust Confirmation Receipt',
+        type: 'Payment Proof',
+        fileSize: '190 KB',
+        issueDate: '2026-07-01T10:15:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:9981023910283019283019283019283019283019283019283019283019283019',
+        options: { escrowAgent: 'First Fidelity Escrow Services Inc.', currency: 'USD' }
+      },
+      {
+        id: 'doc-tx-204',
+        name: 'Customs Entry Documentation & Bill of Lading',
+        type: 'Customs & Port Release',
+        fileSize: '620 KB',
+        issueDate: '2026-07-02T16:00:00Z',
+        status: 'Pending Signature',
+        downloadUrl: '#',
+        hash: 'SHA256:5512039102830192830192830192830192830192830192830192830192830192',
+        options: { containerNo: 'MSCU7728190', shippingLine: 'MSC Mediterranean' }
+      },
+      {
+        id: 'doc-tx-205',
+        name: 'Pre-Issued Export Title Deed',
+        type: 'Title Registration',
+        fileSize: '430 KB',
+        issueDate: '2026-07-02T17:00:00Z',
+        status: 'Needs Review',
+        downloadUrl: '#',
+        hash: 'SHA256:4421039102830192830192830192830192830192830192830192830192830192',
+        options: { lienFree: true, titleState: 'Export In-Bond Stamp' }
+      }
+    ]
   },
   {
     id: 'txn-7003',
-    orderId: 'ord-hold-01', // Land Cruiser hold (expired/overdue)
-    customerId: 'cust-001', // Bruce Wayne
+    orderId: 'ord-hold-01',
+    customerId: 'cust-001',
+    customerName: 'Bruce Wayne',
+    customerEmail: 'bruce@waynecorp.com',
+    customerPhone: '+1 (607) 555-0199',
+    customerTier: 'Enterprise VIP',
     agentId: 'agent-101',
+    agentName: 'Sarah Connor',
+    agentCommission: '$2,706.00',
     vehicleId: 5,
-    amount: '$82,000',
+    vehicleModel: 'Toyota Land Cruiser',
+    vehicleYear: 2023,
+    vehicleVin: 'JTMHU01J9P4091823',
+    vehicleColor: 'Pearl White',
+    vehicleMileage: '5,000 mi',
+    vehicleImage: 'https://images.unsplash.com/photo-1594502184342-2e12f877aa73?w=800&q=80',
+    location: 'Kingston Bonded Warehouse, Bay 02',
+    basePrice: '$82,000',
+    totalAmount: '$90,200',
+    amountPaid: '$0',
+    balanceDue: '$90,200',
     paymentStatus: 'Overdue',
+    escrowStatus: 'Escalation Notice Issued',
+    paymentMethod: 'Corporate Wire Transfer',
     paymentDate: null,
-    dueDate: '2026-06-28T18:00:00Z'
+    dueDate: '2026-06-28T18:00:00Z',
+    clearedDate: null,
+    notes: 'Payment deadline lapsed past 72-hour escrow grace period. Financial operations notified.',
+    paymentBreakdown: {
+      vehicleBase: '$82,000',
+      escrowHoldDeposit: '$5,000',
+      customsImportDuty: '$5,100',
+      documentationRegistration: '$1,600',
+      freightLogistics: '$1,500'
+    },
+    milestones: [
+      {
+        id: 'ms-7003-1',
+        title: 'Security Deposit & VIN Allocation',
+        amount: '$10,000',
+        dueDate: '2026-06-25T18:00:00Z',
+        paidDate: null,
+        status: 'Overdue',
+        method: 'Corporate Wire Transfer',
+        ref: 'OVERDUE-DEP-01',
+        bankTrace: 'PENDING-TRANS-NOTICE'
+      },
+      {
+        id: 'ms-7003-2',
+        title: 'Full Vehicle Acquisition Balance',
+        amount: '$80,200',
+        dueDate: '2026-06-28T18:00:00Z',
+        paidDate: null,
+        status: 'Overdue',
+        method: 'Corporate Wire Transfer',
+        ref: 'OVERDUE-BAL-01',
+        bankTrace: 'PENDING-TRANS-NOTICE'
+      }
+    ],
+    documents: [
+      {
+        id: 'doc-tx-301',
+        name: 'Overdue Demand & Escrow Settlement Notice',
+        type: 'Legal Notice',
+        fileSize: '190 KB',
+        issueDate: '2026-06-29T08:00:00Z',
+        status: 'Action Required',
+        downloadUrl: '#',
+        hash: 'SHA256:7710293810293810293810293810293810293810293810293810293810293810',
+        options: { gracePeriodRemaining: '0 Hours', action: 'Relist or Demand Settlement' }
+      },
+      {
+        id: 'doc-tx-302',
+        name: 'Pro-Forma Commercial Vehicle Invoice',
+        type: 'Invoice & Agreement',
+        fileSize: '298 KB',
+        issueDate: '2026-06-25T14:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:1192830192830192830192830192830192830192830192830192830192830192',
+        options: { vatExempt: false, exportTerms: 'CIF Kingston Port' }
+      },
+      {
+        id: 'doc-tx-303',
+        name: 'Pre-Export JEVIC Inspection Certificate',
+        type: 'Mechanical Inspection',
+        fileSize: '1.8 MB',
+        issueDate: '2026-06-24T11:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:8819203910293810293810293810293810293810293810293810293810293810',
+        options: { inspectionBody: 'JEVIC Japan Export Inspection', grade: '4.5/5.0' }
+      }
+    ]
   },
   {
     id: 'txn-7004',
-    orderId: 'ord-hold-02', // Porsche 911 Stark hold
-    customerId: 'cust-002', // Tony Stark
+    orderId: 'ord-hold-02',
+    customerId: 'cust-002',
+    customerName: 'Tony Stark',
+    customerEmail: 'tony@starkindustries.com',
+    customerPhone: '+1 (212) 555-4682',
+    customerTier: 'Black Card VIP',
     agentId: 'agent-101',
+    agentName: 'Sarah Connor',
+    agentCommission: '$3,696.00',
     vehicleId: 3,
-    amount: '$112,000',
+    vehicleModel: 'Porsche 911',
+    vehicleYear: 2021,
+    vehicleVin: 'WP0AB2A99MS129031',
+    vehicleColor: 'Guards Red',
+    vehicleMileage: '12,000 mi',
+    vehicleImage: 'https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=800&q=80',
+    location: 'New York Depot, Display Suite 1',
+    basePrice: '$112,000',
+    totalAmount: '$123,200',
+    amountPaid: '$25,000',
+    balanceDue: '$98,200',
     paymentStatus: 'Partially Paid',
+    escrowStatus: 'Awaiting SWIFT Clearing',
+    paymentMethod: 'SWIFT Wire MT103',
     paymentDate: '2026-07-02T10:45:00Z',
-    dueDate: '2026-07-10T12:00:00Z'
+    dueDate: '2026-07-10T12:00:00Z',
+    clearedDate: null,
+    notes: '$25k binder logged. Stark Treasury wired balance of $98,200 via SWIFT MT103; awaiting interbank settlement confirmation.',
+    paymentBreakdown: {
+      vehicleBase: '$112,000',
+      escrowHoldDeposit: '$25,000',
+      customsImportDuty: '$7,200',
+      documentationRegistration: '$2,100',
+      freightLogistics: '$1,900'
+    },
+    milestones: [
+      {
+        id: 'ms-7004-1',
+        title: 'Priority Concierge Deposit Hold',
+        amount: '$25,000',
+        dueDate: '2026-07-02T10:00:00Z',
+        paidDate: '2026-07-02T10:45:00Z',
+        status: 'Cleared',
+        method: 'Crypto Vault (USDT)',
+        ref: 'TX-TRC20-994108',
+        bankTrace: 'TRON-TXID-88210-STARK'
+      },
+      {
+        id: 'ms-7004-2',
+        title: 'Remaining Vehicle Acquisition Balance',
+        amount: '$98,200',
+        dueDate: '2026-07-10T12:00:00Z',
+        paidDate: null,
+        status: 'Processing',
+        method: 'SWIFT Bank Wire',
+        ref: 'SWIFT-MT103-STARK-01',
+        bankTrace: 'INTERBANK-PROCESSING'
+      }
+    ],
+    documents: [
+      {
+        id: 'doc-tx-401',
+        name: 'Concierge Acquisition Agreement',
+        type: 'Purchase Contract',
+        fileSize: '412 KB',
+        issueDate: '2026-07-02T11:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:0012938102938102938102938102938102938102938102938102938102938102',
+        options: { speedGovernorRemoval: true, trackPack: 'Option Code 840' }
+      },
+      {
+        id: 'doc-tx-402',
+        name: 'Porsche Official 111-Point Certified Check',
+        type: 'Mechanical Inspection',
+        fileSize: '4.2 MB',
+        issueDate: '2026-07-02T09:30:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:9910293810293810293810293810293810293810293810293810293810293810',
+        options: { dmeReport: 'Zero Over-Revs', ceramicBrakes: '98% Thickness' }
+      },
+      {
+        id: 'doc-tx-403',
+        name: 'SWIFT MT103 Wire Slip from Stark Capital',
+        type: 'Payment Proof',
+        fileSize: '175 KB',
+        issueDate: '2026-07-02T10:45:00Z',
+        status: 'Pending Review',
+        downloadUrl: '#',
+        hash: 'SHA256:3310293810293810293810293810293810293810293810293810293810293810',
+        options: { amountInTransfer: '$98,200.00 USD', issuingBank: 'Morgan Stanley Private Wealth' }
+      },
+      {
+        id: 'doc-tx-404',
+        name: 'Export Customs Title Verification',
+        type: 'Customs & Port Release',
+        fileSize: '380 KB',
+        issueDate: '2026-07-02T12:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:5510293810293810293810293810293810293810293810293810293810293810',
+        options: { usCustomsRelease: 'Port of Newark', status: 'Pre-Cleared' }
+      }
+    ]
+  },
+  {
+    id: 'txn-7005',
+    orderId: 'ord-1092',
+    customerId: 'cust-9428',
+    customerName: 'Alexander Sterling',
+    customerEmail: 'alexander.sterling@kisacoauto.com',
+    customerPhone: '+1 (305) 555-0144',
+    customerTier: 'VIP Tier 1',
+    agentId: 'agent-103',
+    agentName: 'Ellen Ripley',
+    agentCommission: '$2,937.00',
+    vehicleId: 6,
+    vehicleModel: 'Tesla Model S',
+    vehicleYear: 2023,
+    vehicleVin: '5YJSA1E21PF819201',
+    vehicleColor: 'Deep Metallic Blue',
+    vehicleMileage: '8,400 mi',
+    vehicleImage: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
+    location: 'Delivered to Private Residence',
+    basePrice: '$89,000',
+    totalAmount: '$97,900',
+    amountPaid: '$97,900',
+    balanceDue: '$0',
+    paymentStatus: 'Paid',
+    escrowStatus: 'Released & Settled',
+    paymentMethod: 'Certified Bank Draft',
+    paymentDate: '2026-02-12T10:15:00Z',
+    dueDate: '2026-02-12T10:15:00Z',
+    clearedDate: '2026-02-12T11:00:00Z',
+    notes: 'Full payment received and cleared via certified bank draft. Vehicle handed over with enclosed transport.',
+    paymentBreakdown: {
+      vehicleBase: '$89,000',
+      escrowHoldDeposit: '$10,000',
+      customsImportDuty: '$5,200',
+      documentationRegistration: '$1,900',
+      freightLogistics: '$1,800'
+    },
+    milestones: [
+      {
+        id: 'ms-7005-1',
+        title: 'Initial Deposit & Logistics Lock',
+        amount: '$10,000',
+        dueDate: '2026-02-10T11:20:00Z',
+        paidDate: '2026-02-10T11:20:00Z',
+        status: 'Cleared',
+        method: 'Wire Transfer',
+        ref: 'WIRE-FL-19028',
+        bankTrace: 'BOFAUS3N-MT103'
+      },
+      {
+        id: 'ms-7005-2',
+        title: 'Balance Settlement on Delivery',
+        amount: '$87,900',
+        dueDate: '2026-02-12T10:15:00Z',
+        paidDate: '2026-02-12T10:15:00Z',
+        status: 'Cleared',
+        method: 'Certified Cashier Check',
+        ref: 'CHK-9941029',
+        bankTrace: 'CLEAR-DRAFT-2026'
+      }
+    ],
+    documents: [
+      {
+        id: 'doc-tx-501',
+        name: 'Executed Purchase Agreement & Receipt',
+        type: 'Purchase Contract',
+        fileSize: '310 KB',
+        issueDate: '2026-02-10T12:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:6610293810293810293810293810293810293810293810293810293810293810',
+        options: { batteryHealth: '99.2%', superchargerTransfer: 'Active' }
+      },
+      {
+        id: 'doc-tx-502',
+        name: 'EV High-Voltage Battery & System Health Certificate',
+        type: 'Mechanical Inspection',
+        fileSize: '1.9 MB',
+        issueDate: '2026-02-10T15:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:4410293810293810293810293810293810293810293810293810293810293810',
+        options: { batteryDegradation: '0.8%', softwareBuild: '2026.14.2' }
+      },
+      {
+        id: 'doc-tx-503',
+        name: 'Delivery Manifest & Customer Handover Sign-off',
+        type: 'Title Registration',
+        fileSize: '450 KB',
+        issueDate: '2026-02-15T15:30:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:2210293810293810293810293810293810293810293810293810293810293810',
+        options: { mileageAtHandover: '8,422 mi', keysSupplied: 2 }
+      }
+    ]
+  },
+  {
+    id: 'txn-7006',
+    orderId: 'ord-5510',
+    customerId: 'cust-003',
+    customerName: 'Arthur Dent',
+    customerEmail: 'arthur.dent@galaxy.net',
+    customerPhone: '+44 7700 900077',
+    customerTier: 'Standard Expat',
+    agentId: 'agent-102',
+    agentName: 'John Connor',
+    agentCommission: '$1,485.00',
+    vehicleId: 1,
+    vehicleModel: 'BMW 5 Series',
+    vehicleYear: 2022,
+    vehicleVin: 'WBA53BJ01NCM89104',
+    vehicleColor: 'Mineral Grey',
+    vehicleMileage: '18,000 mi',
+    vehicleImage: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80',
+    location: 'Miami Depot, Bay 05',
+    basePrice: '$45,000',
+    totalAmount: '$49,500',
+    amountPaid: '$5,000',
+    balanceDue: '$44,500',
+    paymentStatus: 'Pending',
+    escrowStatus: 'Awaiting Second Tranche',
+    paymentMethod: 'SWIFT Bank Wire',
+    paymentDate: null,
+    dueDate: '2026-07-06T15:00:00Z',
+    clearedDate: null,
+    notes: 'Initial $5,000 hold deposit received. Pro-forma contract generated. Wire details dispatched to UK bank.',
+    paymentBreakdown: {
+      vehicleBase: '$45,000',
+      escrowHoldDeposit: '$5,000',
+      customsImportDuty: '$2,800',
+      documentationRegistration: '$950',
+      freightLogistics: '$750'
+    },
+    milestones: [
+      {
+        id: 'ms-7006-1',
+        title: 'Holding Deposit & Booking Fee',
+        amount: '$5,000',
+        dueDate: '2026-07-01T12:00:00Z',
+        paidDate: '2026-07-01T12:30:00Z',
+        status: 'Cleared',
+        method: 'Credit Card',
+        ref: 'AUTH-CC-55101',
+        bankTrace: 'BARCLAYS-UK-TRANS'
+      },
+      {
+        id: 'ms-7006-2',
+        title: 'Customs & Port Registration Settlement',
+        amount: '$4,500',
+        dueDate: '2026-07-04T12:00:00Z',
+        paidDate: null,
+        status: 'Pending',
+        method: 'SWIFT Bank Wire',
+        ref: 'PENDING-WIRE-02',
+        bankTrace: 'AWAITING-SETTLEMENT'
+      },
+      {
+        id: 'ms-7006-3',
+        title: 'Final Vehicle Balance Payment',
+        amount: '$40,000',
+        dueDate: '2026-07-06T15:00:00Z',
+        paidDate: null,
+        status: 'Pending',
+        method: 'SWIFT Bank Wire',
+        ref: 'PENDING-WIRE-03',
+        bankTrace: 'AWAITING-SETTLEMENT'
+      }
+    ],
+    documents: [
+      {
+        id: 'doc-tx-601',
+        name: 'Pro-Forma Sale Invoice #5510',
+        type: 'Invoice & Agreement',
+        fileSize: '240 KB',
+        issueDate: '2026-07-01T13:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:1120293810293810293810293810293810293810293810293810293810293810',
+        options: { vatRefundEligible: true, currency: 'USD' }
+      },
+      {
+        id: 'doc-tx-602',
+        name: 'BMW Dealer Service History & Inspection Log',
+        type: 'Mechanical Inspection',
+        fileSize: '2.1 MB',
+        issueDate: '2026-06-30T10:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:7720293810293810293810293810293810293810293810293810293810293810',
+        options: { fullServiceHistory: true, recallsPending: 0 }
+      },
+      {
+        id: 'doc-tx-603',
+        name: 'Maritime Bill of Lading (Miami - Kingston)',
+        type: 'Customs & Port Release',
+        fileSize: '390 KB',
+        issueDate: '2026-07-02T08:30:00Z',
+        status: 'Pending Signature',
+        downloadUrl: '#',
+        hash: 'SHA256:8820293810293810293810293810293810293810293810293810293810293810',
+        options: { portOfLoading: 'Port of Miami', vessel: 'Seaboard Pride' }
+      }
+    ]
+  },
+  {
+    id: 'txn-7007',
+    orderId: 'ord-8830',
+    customerId: 'cust-005',
+    customerName: 'Selina Kyle',
+    customerEmail: 'selina.kyle@gotham.org',
+    customerPhone: '+1 (202) 555-0188',
+    customerTier: 'VIP Tier 2',
+    agentId: 'agent-104',
+    agentName: 'Kyle Reese',
+    agentCommission: '$2,574.00',
+    vehicleId: 10,
+    vehicleModel: 'Chevrolet Corvette',
+    vehicleYear: 2022,
+    vehicleVin: '1G1YB2D45N5108924',
+    vehicleColor: 'Torch Red',
+    vehicleMileage: '7,100 mi',
+    vehicleImage: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80',
+    location: 'Kingston Bonded Warehouse, Bay 11',
+    basePrice: '$78,000',
+    totalAmount: '$85,800',
+    amountPaid: '$85,800',
+    balanceDue: '$0',
+    paymentStatus: 'Paid',
+    escrowStatus: 'Released & Settled',
+    paymentMethod: 'Escrow Trust Vault',
+    paymentDate: '2026-06-20T16:00:00Z',
+    dueDate: '2026-06-20T16:00:00Z',
+    clearedDate: '2026-06-20T16:45:00Z',
+    notes: 'Escrow funds cleared and released to dealership. Custom sports exhaust and ceramic coating verified.',
+    paymentBreakdown: {
+      vehicleBase: '$78,000',
+      escrowHoldDeposit: '$10,000',
+      customsImportDuty: '$4,800',
+      documentationRegistration: '$1,600',
+      freightLogistics: '$1,400'
+    },
+    milestones: [
+      {
+        id: 'ms-7007-1',
+        title: 'Escrow Lock Deposit',
+        amount: '$10,000',
+        dueDate: '2026-06-18T14:00:00Z',
+        paidDate: '2026-06-18T14:15:00Z',
+        status: 'Cleared',
+        method: 'Escrow Trust Vault',
+        ref: 'ESC-7007-LOCK',
+        bankTrace: 'ESCRW-VAULT-2026-06'
+      },
+      {
+        id: 'ms-7007-2',
+        title: 'Full Vehicle Settlement Balance',
+        amount: '$75,800',
+        dueDate: '2026-06-20T16:00:00Z',
+        paidDate: '2026-06-20T16:00:00Z',
+        status: 'Cleared',
+        method: 'SWIFT Bank Wire',
+        ref: 'WIRE-US-88301',
+        bankTrace: 'WFUS33-MT103-2281'
+      }
+    ],
+    documents: [
+      {
+        id: 'doc-tx-701',
+        name: 'Bill of Sale & Escrow Release Agreement',
+        type: 'Purchase Contract',
+        fileSize: '380 KB',
+        issueDate: '2026-06-20T17:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:9920293810293810293810293810293810293810293810293810293810293810',
+        options: { hasWarranty: true, isFinanced: false, deliveryType: 'Customer Pick-up' }
+      },
+      {
+        id: 'doc-tx-702',
+        name: 'GM Performance Multi-Point Checklist',
+        type: 'Mechanical Inspection',
+        fileSize: '2.7 MB',
+        issueDate: '2026-06-19T11:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:4420293810293810293810293810293810293810293810293810293810293810',
+        options: { z51Package: true, magneticRide: 'Passed' }
+      },
+      {
+        id: 'doc-tx-703',
+        name: 'Official Port Customs Release & Title Transfer',
+        type: 'Customs & Port Release',
+        fileSize: '540 KB',
+        issueDate: '2026-06-21T09:00:00Z',
+        status: 'Verified',
+        downloadUrl: '#',
+        hash: 'SHA256:1120293810293810293810293810293810293810293810293810293810293810',
+        options: { importPermitNo: 'JAM-2026-EXP-9104', dutyExempt: false }
+      }
+    ]
   }
 ];

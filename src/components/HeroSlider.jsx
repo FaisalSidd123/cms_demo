@@ -30,7 +30,7 @@ const slides = [
     headlineStart: "Your Next Chapter ",
     headlineHighlight: "Starts Here.",
     sub: "Diverse Inventory  •  Seamless Procurement  •  Global Delivery",
-    tag: "C&K DIRECT"
+    tag: "KISACO DIRECT"
   },
   {
     url: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1920&q=80",

@@ -4,7 +4,7 @@ import { orders } from '../data/orders';
 import { documents } from '../data/documents';
 import { purchaseHistory } from '../data/purchaseHistory';
 import { customerProfile } from '../data/customer';
-import { mockCurrentAgent } from '../data/agents';
+import { mockCurrentAgent, agentsRoster } from '../data/agents';
 import { clients } from '../data/clients';
 import { reservations } from '../data/reservations';
 import { activityLog } from '../data/activityLog';
@@ -20,6 +20,8 @@ const dataMap = {
   purchaseHistory,
   customerProfile,
   agents: mockCurrentAgent,
+  currentAgent: mockCurrentAgent,
+  agentsRoster,
   clients,
   reservations,
   activityLog,

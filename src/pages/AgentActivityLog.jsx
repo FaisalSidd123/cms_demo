@@ -52,6 +52,7 @@ export default function AgentActivityLog({ sharedActivities = [], onUpdateActivi
     if (type === 'Email') return <Mail className="w-4 h-4 text-indigo-500 shrink-0" />;
     if (type === 'Meeting') return <Users className="w-4 h-4 text-purple-500 shrink-0" />;
     if (type === 'Status Change') return <Layers className="w-4 h-4 text-amber-500 shrink-0" />;
+    if (type === 'Payment / Escrow') return <Clock className="w-4 h-4 text-emerald-600 shrink-0" />;
     return <FileText className="w-4 h-4 text-neutral-500 shrink-0" />;
   };
 
@@ -166,7 +167,7 @@ export default function AgentActivityLog({ sharedActivities = [], onUpdateActivi
                     <div className="flex-1 flex flex-col text-left">
                       <div className="flex justify-between items-baseline gap-4">
                         <span className="font-display font-bold uppercase tracking-wider text-[11px] text-charcoal">
-                          {client?.name || 'Car Mind Administration'}
+                          {client?.name || 'Kisaco Administration'}
                         </span>
                         <span className="font-mono text-[8px] text-neutral-400 uppercase">
                           {new Date(log.timestamp).toLocaleDateString()} at {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -222,6 +223,7 @@ export default function AgentActivityLog({ sharedActivities = [], onUpdateActivi
                 <option value="Call">Call</option>
                 <option value="Email">Email</option>
                 <option value="Meeting">Meeting</option>
+                <option value="Payment / Escrow">Payment / Escrow Check</option>
                 <option value="Note">Internal Note</option>
               </select>
             </div>

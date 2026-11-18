@@ -92,51 +92,67 @@ export default function AgentPipeline() {
         
         {stages.map((stage) => {
           const stageDeals = deals.filter(d => d.stage === stage);
+          const stageSum = stageDeals.reduce((acc, curr) => {
+            const val = parseInt(curr.value.replace(/[^0-9]/g, '')) || 0;
+            return acc + val;
+          }, 0);
           
           return (
             <div 
               key={stage} 
-              className="w-72 bg-white border border-border-hairline p-4 shrink-0 shadow-xs flex flex-col h-[520px] justify-between"
+              className="w-72 bg-white border border-border-hairline p-4 shrink-0 shadow-xs flex flex-col h-[540px] justify-between rounded-xs"
             >
               <div>
                 {/* Column header */}
                 <div className="flex justify-between items-center mb-4 border-b border-neutral-100 pb-2.5">
-                  <h3 className="font-display font-bold text-[10px] uppercase tracking-wider text-charcoal truncate max-w-[180px]">
-                    {stage}
-                  </h3>
+                  <div>
+                    <h3 className="font-display font-bold text-[10px] uppercase tracking-wider text-charcoal truncate max-w-[150px]">
+                      {stage}
+                    </h3>
+                    <span className="text-[9px] font-mono text-neutral-400 block mt-0.5">
+                      ${Math.round(stageSum / 1000)}k pipeline
+                    </span>
+                  </div>
                   <span className="text-[9px] font-mono bg-neutral-100 text-charcoal px-2 py-0.5 rounded-sm font-bold">
                     {stageDeals.length}
                   </span>
                 </div>
 
                 {/* Deal Cards Container */}
-                <div className="space-y-3.5 overflow-y-auto max-h-[410px] pr-1">
+                <div className="space-y-3.5 overflow-y-auto max-h-[430px] pr-1">
                   {stageDeals.map((deal) => {
                     const currentIdx = stages.indexOf(deal.stage);
                     const canMovePrev = currentIdx > 0;
                     const canMoveNext = currentIdx < stages.length - 1;
+                    const dealNum = parseInt(deal.value.replace(/[^0-9]/g, '')) || 0;
+                    const estComm = Math.round(dealNum * 0.03);
                     
                     return (
                       <div 
                         key={deal.id}
-                        className="bg-light-bg border border-neutral-200/60 p-4 shadow-2xs hover:border-brand-red transition-colors flex flex-col justify-between h-[130px] rounded-xs"
+                        className="bg-light-bg border border-neutral-200/60 p-3.5 shadow-2xs hover:border-brand-red transition-colors flex flex-col justify-between min-h-[140px] rounded-xs"
                       >
                         <div>
                           {/* Client */}
-                          <div className="flex items-center gap-1.5 text-xs text-charcoal font-semibold">
-                            <User className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                            <span className="truncate">{deal.clientName}</span>
+                          <div className="flex items-center justify-between text-xs text-charcoal font-semibold">
+                            <div className="flex items-center gap-1.5 truncate">
+                              <User className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                              <span className="truncate">{deal.clientName}</span>
+                            </div>
+                            <span className="text-[8px] font-mono bg-emerald-50 text-emerald-700 px-1 py-0.2 rounded-2xs shrink-0">
+                              Comm: ${estComm.toLocaleString()}
+                            </span>
                           </div>
 
                           {/* Vehicle */}
-                          <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-widest block mt-1 truncate">
+                          <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider block mt-1.5 truncate font-bold">
                             {deal.vehicleName}
                           </span>
                         </div>
 
                         {/* Bottom value & movement actions */}
                         <div className="flex justify-between items-center mt-3 pt-2.5 border-t border-neutral-200/50">
-                          <span className="text-[11px] font-display font-black text-brand-red tracking-tight">
+                          <span className="text-xs font-display font-black text-brand-red tracking-tight">
                             {deal.value}
                           </span>
 

@@ -6,7 +6,7 @@ import { Mail, Lock, ArrowRight, ArrowLeft } from 'lucide-react';
 export default function Login() {
   const navigate = useNavigate();
   const [role, setRole] = useState('client'); // 'client' / 'agent' / 'admin'
-  const [email, setEmail] = useState('alexander@ckautocentre.com');
+  const [email, setEmail] = useState('alexander@kisacoauto.com');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -37,7 +37,7 @@ export default function Login() {
         <div className="absolute inset-0 w-full h-full select-none pointer-events-none">
           <img
             src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80"
-            alt="C&K Auto Centre Brand Car"
+            alt="Kisaco Auto Sales Brand Car"
             className="w-full h-full object-cover opacity-35 filter grayscale"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/80 to-black/20" />
@@ -53,8 +53,18 @@ export default function Login() {
             <span>Public Catalog</span>
           </Link>
           
-          <div className="space-y-2">
-            <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest block font-bold">// C&K Hub</span>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <img 
+                src="/logo.jpg" 
+                alt="Kisaco Auto Sales Ltd" 
+                className="w-16 h-16 rounded-full object-cover border-2 border-brand-red shadow-xl" 
+              />
+              <div>
+                <span className="text-[10px] font-mono text-brand-red uppercase tracking-widest block font-bold">// Kisaco Hub</span>
+                <span className="font-display font-extrabold text-white text-lg tracking-wider uppercase">Kisaco Auto Sales Ltd</span>
+              </div>
+            </div>
             <h1 className="font-display font-extrabold text-white text-3xl md:text-4xl uppercase tracking-wider leading-tight">
               Discerning Procurement <br />
               <span className="text-brand-red">Simplified.</span>
@@ -68,7 +78,7 @@ export default function Login() {
 
         {/* Footer info */}
         <span className="absolute bottom-8 left-12 font-mono text-[9px] text-neutral-500 uppercase tracking-widest">
-          © 2026 C&K Auto Centre Limited
+          © 2026 Kisaco Auto Sales Ltd
         </span>
 
       </div>
@@ -88,15 +98,22 @@ export default function Login() {
         <div className="w-full max-w-sm space-y-6 text-left">
           
           {/* Logo & welcoming text */}
-          <div className="space-y-1">
-            <Link to="/" className="inline-block font-display font-extrabold tracking-widest text-md uppercase text-charcoal">
-              C&K <span className="text-brand-red">Auto Centre</span>
+          <div className="space-y-2">
+            <Link to="/" className="inline-flex items-center gap-2.5 font-display font-extrabold tracking-widest text-md uppercase text-charcoal">
+              <img 
+                src="/logo.jpg" 
+                alt="Kisaco Auto Sales Ltd" 
+                className="w-10 h-10 rounded-full object-cover border border-neutral-200" 
+              />
+              <div>
+                <span>Kisaco</span> <span className="text-brand-red">Auto Sales</span>
+              </div>
             </Link>
             <h2 className="text-xl font-display font-extrabold uppercase text-charcoal tracking-wide mt-2">
               Workspace Access
             </h2>
             <p className="text-xs text-neutral-400 font-sans">
-              Authenticate details to enter your sandbox account.
+              Authenticate credentials to enter your account console.
             </p>
           </div>
 
@@ -106,7 +123,7 @@ export default function Login() {
               type="button"
               onClick={() => {
                 setRole('client');
-                setEmail('alexander@ckautocentre.com');
+                setEmail('alexander@kisacoauto.com');
               }}
               className={`pb-2.5 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                 role === 'client' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
@@ -118,7 +135,7 @@ export default function Login() {
               type="button"
               onClick={() => {
                 setRole('agent');
-                setEmail('sarah.connor@ckautocentre.com');
+                setEmail('sarah.connor@kisacoauto.com');
               }}
               className={`pb-2.5 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                 role === 'agent' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
@@ -130,7 +147,7 @@ export default function Login() {
               type="button"
               onClick={() => {
                 setRole('admin');
-                setEmail('admin@ckautocentre.com');
+                setEmail('admin@kisacoauto.com');
               }}
               className={`pb-2.5 text-xs font-display font-bold uppercase tracking-wider transition-colors cursor-pointer border-b-2 shrink-0 ${
                 role === 'admin' ? 'border-brand-red text-brand-red' : 'border-transparent text-neutral-400 hover:text-charcoal'
@@ -153,7 +170,7 @@ export default function Login() {
                 type="email"
                 required
                 value={email}
-                placeholder="alexander@ckautocentre.com"
+                placeholder="alexander@kisacoauto.com"
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-white border border-border-hairline px-3.5 py-3 text-xs text-charcoal outline-hidden focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-all"
               />

@@ -441,8 +441,42 @@ export default function AgentDashboard() {
 
         </div>
 
-        {/* Right Column: Priority Clients + Recent activities */}
+        {/* Right Column: Priority Clients + Recent activities + Scheduled Test Drives */}
         <div className="space-y-6">
+
+          {/* Test Drives & Inspections Schedule */}
+          <div className="dash-panel p-5 animate-fade-slide-up" style={{ animationDelay: '220ms' }}>
+            <div className="flex justify-between items-center mb-3 border-b border-neutral-100 pb-2">
+              <span className="font-display font-bold text-xs uppercase tracking-wider text-charcoal flex items-center gap-1.5">
+                <CalendarClock className="w-4 h-4 text-brand-red" />
+                VIP Appointments & Drives
+              </span>
+              <span className="text-[9px] font-mono bg-neutral-100 text-neutral-600 px-1.5 py-0.5 rounded-2xs font-bold">
+                Today
+              </span>
+            </div>
+
+            <div className="space-y-2.5">
+              {[
+                { time: '11:30 AM', client: 'Diana Prince', vehicle: 'Range Rover Sport', type: 'PDI Inspection Walkthrough', status: 'Confirmed' },
+                { time: '02:00 PM', client: 'Tony Stark', vehicle: 'Porsche 911 (Guards Red)', type: 'Escrow Wire Signoff', status: 'In Escrow' },
+                { time: '04:30 PM', client: 'Bruce Wayne', vehicle: 'Toyota Land Cruiser', type: 'Settlement Grace Review', status: 'Urgent' }
+              ].map((apt, i) => (
+                <div key={i} className="p-2.5 bg-neutral-50 border border-neutral-100 rounded-xs space-y-1 text-left">
+                  <div className="flex justify-between items-baseline">
+                    <span className="font-mono text-[9px] font-bold text-brand-red">{apt.time}</span>
+                    <span className={`text-[8px] font-mono uppercase px-1 py-0.2 rounded-2xs font-bold ${
+                      apt.status === 'Urgent' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-800'
+                    }`}>
+                      {apt.status}
+                    </span>
+                  </div>
+                  <div className="font-display font-bold text-xs text-charcoal uppercase">{apt.client}</div>
+                  <div className="text-[10px] text-neutral-500 font-mono">{apt.vehicle} • {apt.type}</div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Top Priority Clients */}
           <div className="dash-panel p-5 animate-fade-slide-up" style={{ animationDelay: '250ms' }}>
